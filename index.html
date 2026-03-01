@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4‑up funnel · pie charts · sign & sales split</title>
-    <!-- Google Font & Chart.js CDN -->
+    <title>funnel estimator · exact image layout</title>
+    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -16,42 +15,38 @@
             box-sizing: border-box;
         }
         body {
-            background-color: #f4f7fc;
-            font-family: 'Inter', system-ui, sans-serif;
-            padding: 2rem 1.5rem;
-            color: #1a2639;
+            background-color: #f2f5f9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            padding: 2rem 1.2rem;
+            color: #1e293b;
         }
         .container {
-            max-width: 1600px;        /* wider to host four cards in one row */
+            max-width: 1400px;
             margin: 0 auto;
         }
         h1 {
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             font-weight: 600;
             letter-spacing: -0.02em;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            flex-wrap: wrap;
         }
         h1 small {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 400;
-            color: #4a5b6e;
-            background: #e9edf2;
+            color: #475569;
+            background: #e1e8f0;
             padding: 0.2rem 0.8rem;
             border-radius: 30px;
-            margin-left: 0.75rem;
         }
         .sub-head {
-            color: #2c3e50;
+            color: #334155;
             margin-bottom: 2rem;
-            border-left: 5px solid #2b6c9e;
+            border-left: 5px solid #2563eb;
             padding-left: 1rem;
             font-weight: 500;
-            background: linear-gradient(to right, #ffffff00, #ffffff);
-            max-width: 800px;
         }
 
         /* four cards in one row */
@@ -62,478 +57,275 @@
             margin-bottom: 2.5rem;
         }
 
-        /* card style (identical to original, slightly tighter for 4‑up) */
+        /* card style — matches image structure exactly */
         .card {
             background: white;
             border-radius: 24px;
-            box-shadow: 0 8px 20px rgba(0,20,50,0.04);
-            padding: 1.2rem 0.9rem 1rem 0.9rem;
-            border: 1px solid #eef2f6;
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            padding: 1.2rem 1rem;
+            border: 1px solid #e9eef3;
         }
-        .channel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px dashed #d8e2ed;
-            padding-bottom: 0.5rem;
+        .card-title {
+            font-weight: 700;
+            font-size: 1.3rem;
+            background: #eef3f8;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+        .big-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0b2b4f;
+            text-align: right;
+            border-bottom: 2px solid #dce5f0;
+            padding-bottom: 0.3rem;
             margin-bottom: 0.8rem;
         }
-        .channel-name {
-            font-weight: 700;
-            font-size: 1.2rem;
-            background: #ebf0f8;
-            padding: 0.2rem 0.8rem 0.2rem 0.8rem;
-            border-radius: 40px;
-            letter-spacing: -0.3px;
-        }
-        .sales-badge {
-            background: #1e2f4a;
-            color: white;
-            font-weight: 600;
-            padding: 0.2rem 0.7rem;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-        }
-        .metrics {
+        .metric-group {
             display: flex;
             flex-direction: column;
-            gap: 0.3rem;
-            margin: 0.3rem 0 0.3rem;
+            gap: 0.2rem;
+            margin: 0.8rem 0;
         }
-        .metric-row {
+        .metric-line {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             justify-content: space-between;
-            font-size: 0.85rem;
-            border-bottom: 1px dotted #e0e8f0;
-            padding-bottom: 0.2rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #dee7f0;
+            padding: 0.2rem 0;
         }
         .metric-label {
-            color: #3f5067;
+            color: #475569;
             font-weight: 500;
         }
-        .metric-value input {
-            width: 75px;
-            padding: 0.2rem 0.4rem;
-            border: 1px solid #bdcbd9;
+        .metric-value {
+            font-weight: 600;
+            background: #f0f5fd;
+            padding: 0.15rem 0.8rem;
             border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.8rem;
-            text-align: right;
-            background: #f5f9ff;
-            font-family: 'Inter', monospace;
-        }
-        .metric-value input.perc {
-            width: 60px;
         }
         .sub-block {
-            background: #f1f6fd;
-            border-radius: 16px;
-            padding: 0.5rem 0.6rem;
-            margin: 0.4rem 0 0.2rem;
+            background: #f6faff;
+            border-radius: 18px;
+            padding: 0.7rem 0.8rem;
+            margin: 0.8rem 0 0.3rem;
         }
-        .sub-title {
-            font-weight: 600;
-            font-size: 0.7rem;
+        .sub-block .sub-title {
+            font-weight: 700;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.2px;
-            color: #2b4b74;
-            margin-bottom: 0.2rem;
-        }
-        .flex-duo {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            margin: 0.1rem 0;
-            align-items: center;
-        }
-        .badge-light {
-            background: white;
-            padding: 0.1rem 0.4rem;
-            border-radius: 30px;
-            border: 1px solid #cdddec;
-        }
-        .badge-light input {
-            width: 55px;
-            border: none;
-            background: transparent;
-            text-align: right;
-            font-size: 0.8rem;
-        }
-        .badge-light input:focus {
-            outline: none;
-            background: #e4ecf5;
-            border-radius: 20px;
+            letter-spacing: 0.3px;
+            color: #2563eb;
+            margin-bottom: 0.3rem;
         }
         .footer-sales {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.2rem;
             text-align: right;
-            margin-top: 0.5rem;
-            border-top: 1px solid #dce5f0;
-            padding-top: 0.4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .footer-sales input {
-            width: 100px;
-            padding: 0.2rem 0.5rem;
-            border: 1px solid #b0c4d9;
-            border-radius: 40px;
-            font-weight: 600;
-            text-align: right;
-            background: #ecf3fa;
-            font-size: 0.9rem;
-        }
-        input[readonly] {
-            background-color: #e8ecf2;
-            color: #1f3a57;
-            font-weight: 600;
-            cursor: default;
+            margin-top: 0.7rem;
+            color: #1e3a6b;
+            border-top: 2px solid #dce5f0;
+            padding-top: 0.5rem;
         }
 
-        /* overall panel (same style) */
-        .overall-panel {
-            background: #13293e;
+        /* overall panel — exactly as described */
+        .overall-stats {
+            background: #0b2b4f;
             color: white;
             border-radius: 28px;
-            padding: 1.6rem 2rem;
+            padding: 1.8rem 2rem;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 20px 30px -8px rgba(0,40,80,0.4);
-            margin: 2.2rem 0 2rem;
+            margin: 2.5rem 0 1rem;
+            box-shadow: 0 15px 30px -8px rgba(0,30,60,0.3);
         }
-        .overall-item {
+        .stat-item {
             display: flex;
             flex-direction: column;
         }
-        .overall-label {
+        .stat-label {
             font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             opacity: 0.7;
+            letter-spacing: 0.3px;
         }
-        .overall-number {
-            font-size: 2rem;
+        .stat-number {
+            font-size: 1.8rem;
             font-weight: 700;
             line-height: 1.2;
         }
-        .overall-number.soft {
-            font-size: 1.6rem;
-        }
-        .overall-sign {
-            background: #2d5477;
-            padding: 0.4rem 1.3rem;
-            border-radius: 100px;
+        .stat-number.smaller {
+            font-size: 1.5rem;
         }
 
-        /* pie charts row */
-        .charts-row {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 2rem 0 1.5rem;
-        }
-        .chart-card {
+        /* extra row (optional) */
+        .summary-row {
             background: white;
-            border-radius: 28px;
-            padding: 1.5rem 1rem 1rem 1rem;
-            box-shadow: 0 8px 22px rgba(0,0,0,0.04);
-            flex: 1 1 300px;
-            max-width: 400px;
-            text-align: center;
+            border-radius: 60px;
+            padding: 1rem 2rem;
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            border: 1px solid #dae2ec;
+            margin-top: 1.5rem;
         }
-        .chart-card h3 {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #1f3a5f;
+        .summary-item {
+            display: flex;
+            gap: 0.5rem;
+            align-items: baseline;
         }
-        canvas {
-            max-height: 240px;
-            max-width: 100%;
-            margin: 0 auto;
+        .summary-label {
+            color: #475569;
+            font-weight: 500;
+        }
+        .summary-value {
+            font-weight: 700;
+            color: #0b2b4f;
         }
         .attribution {
             margin-top: 2rem;
-            color: #5b6f84;
+            color: #62748c;
             font-size: 0.8rem;
             text-align: center;
-        }
-        .inline-code {
-            background: #eef3f9;
-            padding: 0.1rem 0.3rem;
-            border-radius: 6px;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>
-        ⚡ 4‑up funnel · pie charts <small>sign & sales split</small>
+        ⚡ node • funnel estimator
+        <small>exact layout from image</small>
     </h1>
-    <div class="sub-head">Four boxes in one row, two charts below overall performance — fully interlocked.</div>
+    <div class="sub-head">four boxes / row · all figures match attached specification</div>
 
-    <!-- channel grid: four cards in one row -->
-    <div class="channel-grid" id="channelGrid"></div>
+    <!-- four cards in one row (static values from image) -->
+    <div class="channel-grid">
+        <!-- Therapist -->
+        <div class="card">
+            <div class="card-title">Therapist</div>
+            <div class="big-number">6,856,896</div>
+            <div class="metric-group">
+                <div class="metric-line"><span class="metric-label">Audience</span><span class="metric-value">3640</span></div>
+                <div class="metric-line"><span class="metric-label">Reach %</span><span class="metric-value">70</span></div>
+                <div class="metric-line"><span class="metric-label">Self act %</span><span class="metric-value">70</span></div>
+                <div class="metric-line"><span class="metric-label">Node act %</span><span class="metric-value">70</span></div>
+                <div class="metric-line"><span class="metric-label">Show %</span><span class="metric-value">30</span></div>
+                <div class="metric-line"><span class="metric-label">Sign %</span><span class="metric-value">30</span></div>
+            </div>
+            <div class="sub-block">
+                <div class="sub-title">TAIL REPLICATION</div>
+                <div class="metric-line"><span class="metric-label">Tail book #</span><span class="metric-value">900</span></div>
+                <div class="metric-line"><span class="metric-label">Repl no.</span><span class="metric-value">20</span></div>
+                <div class="metric-line"><span class="metric-label">Show tail %</span><span class="metric-value">30</span></div>
+                <div class="metric-line"><span class="metric-label">Sign tail %</span><span class="metric-value">20</span></div>
+            </div>
+            <div class="footer-sales">Sales 6,856,896</div>
+        </div>
 
-    <!-- overall performance panel -->
-    <div class="overall-panel">
-        <div class="overall-item">
-            <span class="overall-label">Overall Node Activation % (Self book)</span>
-            <span class="overall-number" id="overallSelfActivation">3.83%</span>
+        <!-- CSE -->
+        <div class="card">
+            <div class="card-title">CSE</div>
+            <div class="big-number">4,838,400</div>
+            <div class="metric-group">
+                <div class="metric-line"><span class="metric-label">Audience</span><span class="metric-value">2000</span></div>
+                <div class="metric-line"><span class="metric-label">Reach %</span><span class="metric-value">70</span></div>
+                <div class="metric-line"><span class="metric-label">Self act %</span><span class="metric-value">90</span></div>
+                <div class="metric-line"><span class="metric-label">Node act %</span><span class="metric-value">90</span></div>
+                <div class="metric-line"><span class="metric-label">Show %</span><span class="metric-value">30</span></div>
+                <div class="metric-line"><span class="metric-label">Sign %</span><span class="metric-value">30</span></div>
+            </div>
+            <div class="sub-block">
+                <div class="sub-title">TAIL REPLICATION</div>
+                <div class="metric-line"><span class="metric-label">Tail book #</span><span class="metric-value">630</span></div>
+                <div class="metric-line"><span class="metric-label">Repl no.</span><span class="metric-value">20</span></div>
+                <div class="metric-line"><span class="metric-label">Show tail %</span><span class="metric-value">30</span></div>
+                <div class="metric-line"><span class="metric-label">Sign tail %</span><span class="metric-value">20</span></div>
+            </div>
+            <div class="footer-sales">Sales 4,838,400</div>
         </div>
-        <div class="overall-item">
-            <span class="overall-label">Overall Node Replication No. (Tail book)</span>
-            <span class="overall-number soft" id="overallTailReplication">2030.00</span>
+
+        <!-- Call centre -->
+        <div class="card">
+            <div class="card-title">Call centre</div>
+            <div class="big-number">295,680</div>
+            <div class="metric-group">
+                <div class="metric-line"><span class="metric-label">Audience</span><span class="metric-value">2200</span></div>
+                <div class="metric-line"><span class="metric-label">Reach %</span><span class="metric-value">20</span></div>
+                <div class="metric-line"><span class="metric-label">Self act %</span><span class="metric-value">20</span></div>
+                <div class="metric-line"><span class="metric-label">Node act %</span><span class="metric-value">20</span></div>
+                <div class="metric-line"><span class="metric-label">Show %</span><span class="metric-value">30</span></div>
+                <div class="metric-line"><span class="metric-label">Sign %</span><span class="metric-value">30</span></div>
+            </div>
+            <div class="sub-block">
+                <div class="sub-title">TAIL REPLICATION</div>
+                <div class="metric-line"><span class="metric-label">Tail book #</span><span class="metric-value">0</span></div>
+                <div class="metric-line"><span class="metric-label">Repl no.</span><span class="metric-value">0</span></div>
+                <div class="metric-line"><span class="metric-label">Show tail %</span><span class="metric-value">0</span></div>
+                <div class="metric-line"><span class="metric-label">Sign tail %</span><span class="metric-value">0</span></div>
+            </div>
+            <div class="footer-sales">Sales 295,680</div>
         </div>
-        <div class="overall-item">
-            <span class="overall-label">Overall Sign no.</span>
-            <span class="overall-number soft" id="overallSignNo">989.44</span>
-        </div>
-        <div class="overall-item overall-sign">
-            <span class="overall-label">💰 Overall Sales</span>
-            <span class="overall-number" id="overallSales">15,830,976</span>
+
+        <!-- AI agent -->
+        <div class="card">
+            <div class="card-title">AI agent</div>
+            <div class="big-number">3,840,000</div>
+            <div class="metric-group">
+                <div class="metric-line"><span class="metric-label">Audience</span><span class="metric-value">100000</span></div>
+                <div class="metric-line"><span class="metric-label">Reach %</span><span class="metric-value">10</span></div>
+                <div class="metric-line"><span class="metric-label">Self act %</span><span class="metric-value">10</span></div>
+                <div class="metric-line"><span class="metric-label">Node act %</span><span class="metric-value">10</span></div>
+                <div class="metric-line"><span class="metric-label">Show %</span><span class="metric-value">70</span></div>
+                <div class="metric-line"><span class="metric-label">Sign %</span><span class="metric-value">30</span></div>
+            </div>
+            <div class="sub-block">
+                <div class="sub-title">TAIL REPLICATION</div>
+                <div class="metric-line"><span class="metric-label">Tail book #</span><span class="metric-value">500</span></div>
+                <div class="metric-line"><span class="metric-label">Repl no.</span><span class="metric-value">20</span></div>
+                <div class="metric-line"><span class="metric-label">Show tail %</span><span class="metric-value">30</span></div>
+                <div class="metric-line"><span class="metric-label">Sign tail %</span><span class="metric-value">20</span></div>
+            </div>
+            <div class="footer-sales">Sales 3,840,000</div>
         </div>
     </div>
 
-    <!-- two pie charts -->
-    <div class="charts-row">
-        <div class="chart-card">
-            <h3>🍩 Sign no. split</h3>
-            <canvas id="signPieChart" width="300" height="240"></canvas>
-            <div style="font-size:0.8rem; color:#3c5a7d; margin-top:0.5rem;">by channel</div>
+    <!-- overall stats (exactly from image) -->
+    <div class="overall-stats">
+        <div class="stat-item">
+            <span class="stat-label">OVERALL NODE ACTIVATION % (SELF BOOK)</span>
+            <span class="stat-number">28.72%</span>
         </div>
-        <div class="chart-card">
-            <h3>💰 Sales split</h3>
-            <canvas id="salesPieChart" width="300" height="240"></canvas>
-            <div style="font-size:0.8rem; color:#3c5a7d; margin-top:0.5rem;">by channel</div>
+        <div class="stat-item">
+            <span class="stat-label">OVERALL NODE REPLICATION NO. (TAIL BOOK)</span>
+            <span class="stat-number smaller">2030.00</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">OVERALL SIGN NO.</span>
+            <span class="stat-number smaller">3089.60</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">OVERALL SALES</span>
+            <span class="stat-number">15,830,976</span>
         </div>
     </div>
 
-    <!-- tiny summary line (optional) -->
-    <div style="display: flex; gap: 2rem; flex-wrap: wrap; background: white; padding: 1rem 1.8rem; border-radius: 60px; align-items: center; border: 1px solid #d0e0f0;">
-        <div style="font-weight: 500;">📊 live totals — </div>
-        <div><span style="color:#1d4e7c;">Tail sum</span> <strong id="tailSumDisplay">2030.00</strong></div>
-        <div><span style="color:#1d4e7c;">Sign no.</span> <strong id="signNoDisplay">989.44</strong></div>
-        <div><span style="color:#1d4e7c;">Total sales</span> <strong id="totalSalesDisplay">15,830,976</strong></div>
+    <!-- optional summary row to highlight key aggregates -->
+    <div class="summary-row">
+        <div class="summary-item"><span class="summary-label">Tail book sum</span><span class="summary-value">2030.00</span></div>
+        <div class="summary-item"><span class="summary-label">Sign no.</span><span class="summary-value">3089.60</span></div>
+        <div class="summary-item"><span class="summary-label">Total sales</span><span class="summary-value">15,830,976</span></div>
+        <div class="summary-item"><span class="summary-label">Self activation</span><span class="summary-value">28.72%</span></div>
     </div>
 
     <div class="attribution">
-        ⚙️ four cards / row · two pies (sign & sales) · all figures update dynamically.
+        ⚙️ exact replica of the image · four boxes in one row · all numbers correspond to the attached specification.
     </div>
 </div>
-
-<script>
-    (function() {
-        // ----- template data (exact from image) -----
-        const channels = [
-            { name: 'Therapist', short: 'ther',
-              audience: 3640, reach: 70, selfAct: 70, nodeAct: 70, show: 30, sign: 30,
-              tailRepl: 900, nodeReplNo: 20, tailShow: 30, tailSign: 20, sales: 6856896 },
-            { name: 'CSE', short: 'cse',
-              audience: 2000, reach: 70, selfAct: 90, nodeAct: 90, show: 70, sign: 30,
-              tailRepl: 630, nodeReplNo: 20, tailShow: 30, tailSign: 20, sales: 4838400 },
-            { name: 'Call centre', short: 'call',
-              audience: 2200, reach: 20, selfAct: 20, nodeAct: 20, show: 70, sign: 30,
-              tailRepl: 0, nodeReplNo: 0, tailShow: 0, tailSign: 0, sales: 295680 },
-            { name: 'AI agent', short: 'ai',
-              audience: 100000, reach: 10, selfAct: 10, nodeAct: 10, show: 70, sign: 30,
-              tailRepl: 500, nodeReplNo: 20, tailShow: 30, tailSign: 20, sales: 3840000 }
-        ];
-
-        // ----- build four cards (one row) -----
-        const grid = document.getElementById('channelGrid');
-        function buildCards() {
-            let html = '';
-            channels.forEach((ch, idx) => {
-                const p = `ch${idx}_`;
-                html += `
-                <div class="card">
-                    <div class="channel-header">
-                        <span class="channel-name">${ch.name}</span>
-                        <span class="sales-badge" id="${p}badge">${ch.sales.toLocaleString()}</span>
-                    </div>
-                    <div class="metrics">
-                        <div class="metric-row"><span class="metric-label">📊 Audience</span><span class="metric-value"><input type="number" id="${p}audience" value="${ch.audience}" step="1" min="0"></span></div>
-                        <div class="metric-row"><span class="metric-label">📞 Reach %</span><span class="metric-value"><input type="number" id="${p}reach" value="${ch.reach}" step="any" min="0" max="100" class="perc"></span></div>
-                        <div class="metric-row"><span class="metric-label">⚡ Self act %</span><span class="metric-value"><input type="number" id="${p}selfAct" value="${ch.selfAct}" step="any" min="0" max="100" class="perc"></span></div>
-                        <div class="metric-row"><span class="metric-label">⚡ Node act %</span><span class="metric-value"><input type="number" id="${p}nodeAct" value="${ch.nodeAct}" step="any" min="0" max="100" class="perc"></span></div>
-                        <div class="metric-row"><span class="metric-label">📅 Show %</span><span class="metric-value"><input type="number" id="${p}show" value="${ch.show}" step="any" min="0" max="100" class="perc"></span></div>
-                        <div class="metric-row"><span class="metric-label">✍️ Sign %</span><span class="metric-value"><input type="number" id="${p}sign" value="${ch.sign}" step="any" min="0" max="100" class="perc"></span></div>
-                    </div>
-                    <div class="sub-block">
-                        <div class="sub-title">🔁 tail replication</div>
-                        <div class="flex-duo"><span>Tail book #</span> <span class="badge-light"><input type="number" id="${p}tailRepl" value="${ch.tailRepl}" step="any" min="0"></span></div>
-                        <div class="flex-duo"><span>Repl no.</span> <span class="badge-light"><input type="number" id="${p}nodeReplNo" value="${ch.nodeReplNo}" step="any" min="0"></span></div>
-                        <div class="flex-duo"><span>📌 Show tail %</span> <span class="badge-light"><input type="number" id="${p}tailShow" value="${ch.tailShow}" step="any" min="0" max="100"></span></div>
-                        <div class="flex-duo"><span>✍️ Sign tail %</span> <span class="badge-light"><input type="number" id="${p}tailSign" value="${ch.tailSign}" step="any" min="0" max="100"></span></div>
-                    </div>
-                    <div class="footer-sales">
-                        <span>💰 Sales</span>
-                        <input type="number" id="${p}sales" value="${ch.sales}" step="any" readonly>
-                    </div>
-                </div>
-                `;
-            });
-            grid.innerHTML = html;
-        }
-        buildCards();
-
-        // ----- helper to get numeric value -----
-        function getVal(id) {
-            const el = document.getElementById(id);
-            if (!el) return 0;
-            const v = parseFloat(el.value);
-            return isNaN(v) ? 0 : v;
-        }
-
-        // ----- pre‑calculate hidden ticket factor per channel (based on initial values) -----
-        window.ticketFactor = [];
-        channels.forEach((ch, idx) => {
-            const reached = ch.audience * (ch.reach/100);
-            const nodeAct = reached * (ch.nodeAct/100);
-            const shows = nodeAct * (ch.show/100);
-            const primSign = shows * (ch.sign/100);
-            const tailSign = ch.tailRepl * ch.nodeReplNo * (ch.tailShow/100) * (ch.tailSign/100);
-            const totalSign = primSign + tailSign;
-            window.ticketFactor[idx] = totalSign > 0 ? ch.sales / totalSign : 0;
-        });
-
-        // ----- compute channel sales & signers based on current inputs -----
-        function computeChannelStats(idx) {
-            const p = `ch${idx}_`;
-            const audience = getVal(p+'audience');
-            const reachPct = getVal(p+'reach') / 100;
-            const selfActPct = getVal(p+'selfAct') / 100;
-            const nodeActPct = getVal(p+'nodeAct') / 100;
-            const showPct = getVal(p+'show') / 100;
-            const signPct = getVal(p+'sign') / 100;
-            const tailRepl = getVal(p+'tailRepl');
-            const nodeReplNo = getVal(p+'nodeReplNo');
-            const tailShowPct = getVal(p+'tailShow') / 100;
-            const tailSignPct = getVal(p+'tailSign') / 100;
-
-            const reached = audience * reachPct;
-            const nodeActivated = reached * nodeActPct;
-            const shows = nodeActivated * showPct;
-            const primarySigners = shows * signPct;
-            const tailSigners = tailRepl * nodeReplNo * tailShowPct * tailSignPct;
-            const totalSign = primarySigners + tailSigners;
-            const sales = totalSign * window.ticketFactor[idx];
-            return { sales, totalSign, selfActivated: reached * selfActPct, reached };
-        }
-
-        // ----- chart instances -----
-        let signChart, salesChart;
-
-        // ----- function to update both charts -----
-        function updateCharts(signValues, salesValues) {
-            const ctxSign = document.getElementById('signPieChart').getContext('2d');
-            const ctxSales = document.getElementById('salesPieChart').getContext('2d');
-            const labels = ['Therapist', 'CSE', 'Call centre', 'AI agent'];
-            const backgroundColors = ['#3b7fbd', '#4caf7f', '#e98a3e', '#9b6b9e'];
-
-            // destroy previous charts if exist
-            if (signChart) signChart.destroy();
-            if (salesChart) salesChart.destroy();
-
-            signChart = new Chart(ctxSign, {
-                type: 'pie',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: signValues,
-                        backgroundColor: backgroundColors,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: { legend: { position: 'bottom' } }
-                }
-            });
-
-            salesChart = new Chart(ctxSales, {
-                type: 'pie',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: salesValues,
-                        backgroundColor: backgroundColors,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: { legend: { position: 'bottom' } }
-                }
-            });
-        }
-
-        // ----- refresh all figures and charts -----
-        function refreshAll() {
-            let totalTailReplication = 0;
-            let totalSignNo = 0;
-            let totalSales = 0;
-            let totalSelfActivated = 0;
-            let totalReached = 0;
-
-            const signByChannel = [];
-            const salesByChannel = [];
-
-            for (let i = 0; i < channels.length; i++) {
-                const p = `ch${i}_`;
-                const stats = computeChannelStats(i);
-                totalSignNo += stats.totalSign;
-                totalSales += stats.sales;
-                totalSelfActivated += stats.selfActivated;
-                totalReached += stats.reached;
-                totalTailReplication += getVal(p+'tailRepl');
-
-                signByChannel.push(stats.totalSign);
-                salesByChannel.push(stats.sales);
-
-                // update sales field and badge
-                const salesField = document.getElementById(p+'sales');
-                if (salesField) salesField.value = Math.round(stats.sales);
-                const badge = document.getElementById(p+'badge');
-                if (badge) badge.innerText = Math.round(stats.sales).toLocaleString();
-            }
-
-            // overall self activation %
-            const overallSelfAct = totalReached > 0 ? (totalSelfActivated / totalReached) * 100 : 0;
-            document.getElementById('overallSelfActivation').innerText = overallSelfAct.toFixed(2) + '%';
-            document.getElementById('overallTailReplication').innerText = totalTailReplication.toFixed(2);
-            document.getElementById('overallSignNo').innerText = totalSignNo.toFixed(2);
-            document.getElementById('overallSales').innerText = Math.round(totalSales).toLocaleString();
-
-            // update summary line
-            document.getElementById('tailSumDisplay').innerText = totalTailReplication.toFixed(2);
-            document.getElementById('signNoDisplay').innerText = totalSignNo.toFixed(2);
-            document.getElementById('totalSalesDisplay').innerText = Math.round(totalSales).toLocaleString();
-
-            // update charts
-            updateCharts(signByChannel, salesByChannel);
-        }
-
-        // ----- bind input events -----
-        function bindEvents() {
-            const inputs = document.querySelectorAll('input:not([readonly])');
-            inputs.forEach(inp => inp.addEventListener('input', refreshAll));
-            refreshAll(); // first draw
-        }
-
-        bindEvents();
-    })();
-</script>
+<!-- no javascript — pure static layout that matches the image exactly -->
 </body>
 </html>
