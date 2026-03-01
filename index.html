@@ -3,329 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>funnel estimator · exact image layout</title>
-    <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <title>funnel · 4‑up linked</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #f2f5f9;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            padding: 2rem 1.2rem;
-            color: #1e293b;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        h1 small {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #475569;
-            background: #e1e8f0;
-            padding: 0.2rem 0.8rem;
-            border-radius: 30px;
-        }
-        .sub-head {
-            color: #334155;
-            margin-bottom: 2rem;
-            border-left: 5px solid #2563eb;
-            padding-left: 1rem;
-            font-weight: 500;
-        }
-
-        /* four cards in one row */
-        .channel-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.2rem;
-            margin-bottom: 2.5rem;
-        }
-
-        /* card style — matches image structure exactly */
-        .card {
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
-            padding: 1.2rem 1rem;
-            border: 1px solid #e9eef3;
-        }
-        .card-title {
-            font-weight: 700;
-            font-size: 1.3rem;
-            background: #eef3f8;
-            padding: 0.2rem 1rem;
-            border-radius: 40px;
-            display: inline-block;
-            margin-bottom: 0.5rem;
-        }
-        .big-number {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #0b2b4f;
-            text-align: right;
-            border-bottom: 2px solid #dce5f0;
-            padding-bottom: 0.3rem;
-            margin-bottom: 0.8rem;
-        }
-        .metric-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-            margin: 0.8rem 0;
-        }
-        .metric-line {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            border-bottom: 1px dashed #dee7f0;
-            padding: 0.2rem 0;
-        }
-        .metric-label {
-            color: #475569;
-            font-weight: 500;
-        }
-        .metric-value {
-            font-weight: 600;
-            background: #f0f5fd;
-            padding: 0.15rem 0.8rem;
-            border-radius: 30px;
-        }
-        .sub-block {
-            background: #f6faff;
-            border-radius: 18px;
-            padding: 0.7rem 0.8rem;
-            margin: 0.8rem 0 0.3rem;
-        }
-        .sub-block .sub-title {
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            color: #2563eb;
-            margin-bottom: 0.3rem;
-        }
-        .footer-sales {
-            font-weight: 700;
-            font-size: 1.2rem;
-            text-align: right;
-            margin-top: 0.7rem;
-            color: #1e3a6b;
-            border-top: 2px solid #dce5f0;
-            padding-top: 0.5rem;
-        }
-
-        /* overall panel — exactly as described */
-        .overall-stats {
-            background: #0b2b4f;
-            color: white;
-            border-radius: 28px;
-            padding: 1.8rem 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            margin: 2.5rem 0 1rem;
-            box-shadow: 0 15px 30px -8px rgba(0,30,60,0.3);
-        }
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-        }
-        .stat-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            opacity: 0.7;
-            letter-spacing: 0.3px;
-        }
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-        .stat-number.smaller {
-            font-size: 1.5rem;
-        }
-
-        /* extra row (optional) */
-        .summary-row {
-            background: white;
-            border-radius: 60px;
-            padding: 1rem 2rem;
-            display: flex;
-            gap: 2.5rem;
-            flex-wrap: wrap;
-            border: 1px solid #dae2ec;
-            margin-top: 1.5rem;
-        }
-        .summary-item {
-            display: flex;
-            gap: 0.5rem;
-            align-items: baseline;
-        }
-        .summary-label {
-            color: #475569;
-            font-weight: 500;
-        }
-        .summary-value {
-            font-weight: 700;
-            color: #0b2b4f;
-        }
-        .attribution {
-            margin-top: 2rem;
-            color: #62748c;
-            font-size: 0.8rem;
-            text-align: center;
-        }
+        * { box-sizing: border-box; margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+        body { background: #f0f3f8; padding: 2rem 1rem; }
+        .container { max-width: 1500px; margin: 0 auto; }
+        h2 { margin-bottom: 1.5rem; font-weight: 500; color: #1e2f4a; font-size: 1.4rem; }
+        .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .card { background: white; border-radius: 20px; padding: 1rem 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #dbe4ed; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.3rem; background: #ecf2f9; display: inline-block; padding: 0.1rem 1rem; border-radius: 30px; }
+        .big-sales { font-size: 1.4rem; font-weight: 700; text-align: right; border-bottom: 1px solid #d2deec; padding-bottom: 0.2rem; margin-bottom: 0.6rem; color: #002856; }
+        .line { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border-bottom: 1px dashed #e2e9f2; padding: 0.2rem 0; }
+        .label { color: #2b4a6f; }
+        input { width: 70px; padding: 0.2rem 0.3rem; border: 1px solid #b9cbdf; border-radius: 30px; text-align: right; font-weight: 500; background: #f6faff; font-size: 0.85rem; }
+        input:focus { outline: 2px solid #2b6c9e; }
+        .tail-block { background: #f4f9ff; border-radius: 16px; padding: 0.5rem 0.6rem; margin: 0.7rem 0 0.3rem; }
+        .tail-title { font-weight: 600; font-size: 0.7rem; text-transform: uppercase; color: #1f5090; margin-bottom: 0.2rem; }
+        .readonly-sales { background: #e5ecf5; border: 1px solid #b0c6dd; font-weight: 700; width: 100px; }
+        .overall { background: #102a41; color: white; border-radius: 40px; padding: 1.5rem 1.8rem; display: flex; flex-wrap: wrap; gap: 1.5rem 2rem; margin: 1.5rem 0 1rem; }
+        .overall-item { display: flex; flex-direction: column; }
+        .overall-label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; }
+        .overall-number { font-size: 1.6rem; font-weight: 700; }
+        .attribution { text-align: center; color: #4b637b; font-size: 0.75rem; margin-top: 1.8rem; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>
-        ⚡ node • funnel estimator
-        <small>exact layout from image</small>
-    </h1>
-    <div class="sub-head">four boxes / row · all figures match attached specification</div>
+    <h2>⚡ funnel · 4‑up linked (blank → auto update)</h2>
+    <div class="row" id="cardRow"></div>   <!-- four cards injected -->
 
-    <!-- four cards in one row (static values from image) -->
-    <div class="channel-grid">
-        <!-- Therapist -->
-        <div class="card">
-            <div class="card-title">Therapist</div>
-            <div class="big-number">6,856,896</div>
-            <div class="metric-group">
-                <div class="metric-line"><span class="metric-label">Audience</span><span class="metric-value">3640</span></div>
-                <div class="metric-line"><span class="metric-label">Reach %</span><span class="metric-value">70</span></div>
-                <div class="metric-line"><span class="metric-label">Self act %</span><span class="metric-value">70</span></div>
-                <div class="metric-line"><span class="metric-label">Node act %</span><span class="metric-value">70</span></div>
-                <div class="metric-line"><span class="metric-label">Show %</span><span class="metric-value">30</span></div>
-                <div class="metric-line"><span class="metric-label">Sign %</span><span class="metric-value">30</span></div>
-            </div>
-            <div class="sub-block">
-                <div class="sub-title">TAIL REPLICATION</div>
-                <div class="metric-line"><span class="metric-label">Tail book #</span><span class="metric-value">900</span></div>
-                <div class="metric-line"><span class="metric-label">Repl no.</span><span class="metric-value">20</span></div>
-                <div class="metric-line"><span class="metric-label">Show tail %</span><span class="metric-value">30</span></div>
-                <div class="metric-line"><span class="metric-label">Sign tail %</span><span class="metric-value">20</span></div>
-            </div>
-            <div class="footer-sales">Sales 6,856,896</div>
-        </div>
-
-        <!-- CSE -->
-        <div class="card">
-            <div class="card-title">CSE</div>
-            <div class="big-number">4,838,400</div>
-            <div class="metric-group">
-                <div class="metric-line"><span class="metric-label">Audience</span><span class="metric-value">2000</span></div>
-                <div class="metric-line"><span class="metric-label">Reach %</span><span class="metric-value">70</span></div>
-                <div class="metric-line"><span class="metric-label">Self act %</span><span class="metric-value">90</span></div>
-                <div class="metric-line"><span class="metric-label">Node act %</span><span class="metric-value">90</span></div>
-                <div class="metric-line"><span class="metric-label">Show %</span><span class="metric-value">30</span></div>
-                <div class="metric-line"><span class="metric-label">Sign %</span><span class="metric-value">30</span></div>
-            </div>
-            <div class="sub-block">
-                <div class="sub-title">TAIL REPLICATION</div>
-                <div class="metric-line"><span class="metric-label">Tail book #</span><span class="metric-value">630</span></div>
-                <div class="metric-line"><span class="metric-label">Repl no.</span><span class="metric-value">20</span></div>
-                <div class="metric-line"><span class="metric-label">Show tail %</span><span class="metric-value">30</span></div>
-                <div class="metric-line"><span class="metric-label">Sign tail %</span><span class="metric-value">20</span></div>
-            </div>
-            <div class="footer-sales">Sales 4,838,400</div>
-        </div>
-
-        <!-- Call centre -->
-        <div class="card">
-            <div class="card-title">Call centre</div>
-            <div class="big-number">295,680</div>
-            <div class="metric-group">
-                <div class="metric-line"><span class="metric-label">Audience</span><span class="metric-value">2200</span></div>
-                <div class="metric-line"><span class="metric-label">Reach %</span><span class="metric-value">20</span></div>
-                <div class="metric-line"><span class="metric-label">Self act %</span><span class="metric-value">20</span></div>
-                <div class="metric-line"><span class="metric-label">Node act %</span><span class="metric-value">20</span></div>
-                <div class="metric-line"><span class="metric-label">Show %</span><span class="metric-value">30</span></div>
-                <div class="metric-line"><span class="metric-label">Sign %</span><span class="metric-value">30</span></div>
-            </div>
-            <div class="sub-block">
-                <div class="sub-title">TAIL REPLICATION</div>
-                <div class="metric-line"><span class="metric-label">Tail book #</span><span class="metric-value">0</span></div>
-                <div class="metric-line"><span class="metric-label">Repl no.</span><span class="metric-value">0</span></div>
-                <div class="metric-line"><span class="metric-label">Show tail %</span><span class="metric-value">0</span></div>
-                <div class="metric-line"><span class="metric-label">Sign tail %</span><span class="metric-value">0</span></div>
-            </div>
-            <div class="footer-sales">Sales 295,680</div>
-        </div>
-
-        <!-- AI agent -->
-        <div class="card">
-            <div class="card-title">AI agent</div>
-            <div class="big-number">3,840,000</div>
-            <div class="metric-group">
-                <div class="metric-line"><span class="metric-label">Audience</span><span class="metric-value">100000</span></div>
-                <div class="metric-line"><span class="metric-label">Reach %</span><span class="metric-value">10</span></div>
-                <div class="metric-line"><span class="metric-label">Self act %</span><span class="metric-value">10</span></div>
-                <div class="metric-line"><span class="metric-label">Node act %</span><span class="metric-value">10</span></div>
-                <div class="metric-line"><span class="metric-label">Show %</span><span class="metric-value">70</span></div>
-                <div class="metric-line"><span class="metric-label">Sign %</span><span class="metric-value">30</span></div>
-            </div>
-            <div class="sub-block">
-                <div class="sub-title">TAIL REPLICATION</div>
-                <div class="metric-line"><span class="metric-label">Tail book #</span><span class="metric-value">500</span></div>
-                <div class="metric-line"><span class="metric-label">Repl no.</span><span class="metric-value">20</span></div>
-                <div class="metric-line"><span class="metric-label">Show tail %</span><span class="metric-value">30</span></div>
-                <div class="metric-line"><span class="metric-label">Sign tail %</span><span class="metric-value">20</span></div>
-            </div>
-            <div class="footer-sales">Sales 3,840,000</div>
-        </div>
+    <div class="overall">
+        <div class="overall-item"><span class="overall-label">Self activation %</span><span class="overall-number" id="actPct">0.00%</span></div>
+        <div class="overall-item"><span class="overall-label">Tail book sum</span><span class="overall-number" id="tailSum">0.00</span></div>
+        <div class="overall-item"><span class="overall-label">Total sign no.</span><span class="overall-number" id="totalSign">0.00</span></div>
+        <div class="overall-item"><span class="overall-label">Total sales</span><span class="overall-number" id="totalSales">0</span></div>
     </div>
 
-    <!-- overall stats (exactly from image) -->
-    <div class="overall-stats">
-        <div class="stat-item">
-            <span class="stat-label">OVERALL NODE ACTIVATION % (SELF BOOK)</span>
-            <span class="stat-number">28.72%</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">OVERALL NODE REPLICATION NO. (TAIL BOOK)</span>
-            <span class="stat-number smaller">2030.00</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">OVERALL SIGN NO.</span>
-            <span class="stat-number smaller">3089.60</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">OVERALL SALES</span>
-            <span class="stat-number">15,830,976</span>
-        </div>
+    <div style="background: white; border-radius: 40px; padding: 0.8rem 1.8rem; display: flex; gap: 2rem; border:1px solid #d7e2ef;">
+        <span>📊 tail: <span id="sumTailFoot">0.00</span></span>
+        <span>📈 sign: <span id="sumSignFoot">0.00</span></span>
+        <span>💰 sales: <span id="sumSalesFoot">0</span></span>
     </div>
-
-    <!-- optional summary row to highlight key aggregates -->
-    <div class="summary-row">
-        <div class="summary-item"><span class="summary-label">Tail book sum</span><span class="summary-value">2030.00</span></div>
-        <div class="summary-item"><span class="summary-label">Sign no.</span><span class="summary-value">3089.60</span></div>
-        <div class="summary-item"><span class="summary-label">Total sales</span><span class="summary-value">15,830,976</span></div>
-        <div class="summary-item"><span class="summary-label">Self activation</span><span class="summary-value">28.72%</span></div>
-    </div>
-
-    <div class="attribution">
-        ⚙️ exact replica of the image · four boxes in one row · all numbers correspond to the attached specification.
-    </div>
+    <div class="attribution">all inputs linked · change any number → everything recomputes</div>
 </div>
-<!-- no javascript — pure static layout that matches the image exactly -->
+
+<script>
+(function() {
+    // ----- initial blank template (values from image, but can be changed) -----
+    const channels = [
+        { name:'Therapist',  aud:3640, reach:70, self:70, node:70, show:30, sign:30, tail:900, repl:20, tshow:30, tsign:20, sales:6856896 },
+        { name:'CSE',        aud:2000, reach:70, self:90, node:90, show:30, sign:30, tail:630, repl:20, tshow:30, tsign:20, sales:4838400 },
+        { name:'Call centre',aud:2200, reach:20, self:20, node:20, show:30, sign:30, tail:0,   repl:0,  tshow:0,  tsign:0,  sales:295680 },
+        { name:'AI agent',   aud:100000, reach:10, self:10, node:10, show:70, sign:30, tail:500, repl:20, tshow:30, tsign:20, sales:3840000 }
+    ];
+
+    // ----- build four cards, assign short ids: th0, th1, th2, th3 + field names -----
+    const row = document.getElementById('cardRow');
+    let html = '';
+    channels.forEach((ch, i) => {
+        html += `
+        <div class="card">
+            <h3>${ch.name}</h3>
+            <div class="big-sales"><input type="number" id="s${i}" value="${ch.sales}" step="any" readonly class="readonly-sales" style="width:110px;"></div>
+            <div class="line"><span class="label">Audience</span> <input type="number" id="a${i}" value="${ch.aud}" step="1" min="0"></div>
+            <div class="line"><span class="label">Reach %</span> <input type="number" id="r${i}" value="${ch.reach}" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Self act %</span> <input type="number" id="se${i}" value="${ch.self}" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Node act %</span> <input type="number" id="n${i}" value="${ch.node}" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Show %</span> <input type="number" id="sh${i}" value="${ch.show}" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Sign %</span> <input type="number" id="si${i}" value="${ch.sign}" step="any" min="0" max="100"></div>
+            <div class="tail-block">
+                <div class="tail-title">TAIL REPLICATION</div>
+                <div class="line"><span class="label">Tail book #</span> <input type="number" id="t${i}" value="${ch.tail}" step="any" min="0"></div>
+                <div class="line"><span class="label">Repl no.</span> <input type="number" id="rep${i}" value="${ch.repl}" step="any" min="0"></div>
+                <div class="line"><span class="label">Show tail %</span> <input type="number" id="ts${i}" value="${ch.tshow}" step="any" min="0" max="100"></div>
+                <div class="line"><span class="label">Sign tail %</span> <input type="number" id="tss${i}" value="${ch.tsign}" step="any" min="0" max="100"></div>
+            </div>
+        </div>`;
+    });
+    row.innerHTML = html;
+
+    // ----- helper to read input safely -----
+    const $ = id => {
+        const el = document.getElementById(id);
+        if (!el) return 0;
+        const v = parseFloat(el.value);
+        return isNaN(v) ? 0 : v;
+    };
+
+    // ----- pre‑compute fixed ticket (sales per total sign) from initial values to keep ratio -----
+    const ticketFactor = channels.map((ch, i) => {
+        const reach = ch.aud * (ch.reach/100);
+        const nodeAct = reach * (ch.node/100);
+        const shows = nodeAct * (ch.show/100);
+        const primSign = shows * (ch.sign/100);
+        const tailSign = ch.tail * ch.repl * (ch.tshow/100) * (ch.tsign/100);
+        const totalSign = primSign + tailSign;
+        return totalSign > 0 ? ch.sales / totalSign : 0;
+    });
+
+    // ----- main update function -----
+    function refresh() {
+        let totalTail = 0, totalSignNo = 0, totalSales = 0;
+        let totalSelfAct = 0, totalReached = 0;
+
+        for (let i = 0; i < 4; i++) {
+            // read all values
+            const aud = $(`a${i}`), reach = $(`r${i}`)/100, selfPct = $(`se${i}`)/100,
+                  nodePct = $(`n${i}`)/100, showPct = $(`sh${i}`)/100, signPct = $(`si${i}`)/100,
+                  tailBook = $(`t${i}`), replNo = $(`rep${i}`),
+                  tailShow = $(`ts${i}`)/100, tailSign = $(`tss${i}`)/100;
+
+            const reached = aud * reach;
+            const selfAct = reached * selfPct;      // for overall activation
+            const nodeAct = reached * nodePct;
+            const shows = nodeAct * showPct;
+            const primarySign = shows * signPct;
+            const tailGenerated = tailBook * replNo * tailShow * tailSign;
+            const totalSign = primarySign + tailGenerated;
+            const sales = totalSign * ticketFactor[i];
+
+            totalReached += reached;
+            totalSelfAct += selfAct;
+            totalTail += tailBook;
+            totalSignNo += totalSign;
+            totalSales += sales;
+
+            // update readonly sales field
+            const salesField = document.getElementById(`s${i}`);
+            if (salesField) salesField.value = Math.round(sales);
+        }
+
+        // overall self activation %
+        const overallAct = totalReached > 0 ? (totalSelfAct / totalReached) * 100 : 0;
+        document.getElementById('actPct').innerText = overallAct.toFixed(2) + '%';
+        document.getElementById('tailSum').innerText = totalTail.toFixed(2);
+        document.getElementById('totalSign').innerText = totalSignNo.toFixed(2);
+        document.getElementById('totalSales').innerText = Math.round(totalSales).toLocaleString();
+
+        // footer
+        document.getElementById('sumTailFoot').innerText = totalTail.toFixed(2);
+        document.getElementById('sumSignFoot').innerText = totalSignNo.toFixed(2);
+        document.getElementById('sumSalesFoot').innerText = Math.round(totalSales).toLocaleString();
+    }
+
+    // ----- bind all inputs (except readonly sales) -----
+    const inputs = document.querySelectorAll('input:not([readonly])');
+    inputs.forEach(inp => inp.addEventListener('input', refresh));
+
+    // initial update to set correct sales / overalls
+    refresh();
+})();
+</script>
 </body>
 </html>
