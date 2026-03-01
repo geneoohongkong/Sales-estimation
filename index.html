@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figure Estimation Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+        
+        :root {
+            --primary: 234 179 8;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .title-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        input[type="number"] {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgb(234 179 8 / 0.3);
+            border-color: rgb(234 179 8);
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body class="bg-zinc-100">
+    <div class="max-w-7xl mx-auto p-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h1 class="title-font text-4xl font-semibold tracking-tighter text-zinc-900">Figure Estimation</h1>
+                <p class="text-zinc-500 mt-1">Interactive dashboard — all figures are adjustable and interlinked</p>
+            </div>
+            <div class="flex items-center gap-3 text-sm text-zinc-500">
+                <div class="bg-white px-4 py-2 rounded-2xl shadow-sm flex items-center gap-2">
+                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                    Live calculation
+                </div>
+            </div>
+        </div>
+
+        <!-- Four Channel Cards (will be populated by JS) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="cards"></div>
+
+        <!-- Overall Metrics Bar -->
+        <div class="mt-12 bg-zinc-900 text-white rounded-3xl p-8 shadow-xl">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <!-- Node Activation -->
+                <div>
+                    <div class="flex items-center gap-2 text-amber-400 text-xs font-medium tracking-widest">
+                        OVERALL NODE ACTIVATION % (SELF BOOK)
+                    </div>
+                    <div id="overall-node-act" class="text-5xl font-semibold title-font tracking-tighter mt-2">28.72%</div>
+                </div>
+                
+                <!-- Node Replication -->
+                <div>
+                    <div class="flex items-center gap-2 text-amber-400 text-xs font-medium tracking-widest">
+                        OVERALL NODE REPLICATION NO. (TAIL BOOK)
+                    </div>
+                    <div id="overall-repl" class="text-5xl font-semibold title-font tracking-tighter mt-2">2030.00</div>
+                </div>
+                
+                <!-- Overall Sign No -->
+                <div>
+                    <div class="flex items-center gap-2 text-amber-400 text-xs font-medium tracking-widest">
+                        OVERALL SIGN NO.
+                    </div>
+                    <div id="overall-sign" class="text-5xl font-semibold title-font tracking-tighter mt-2">3089.60</div>
+                </div>
+                
+                <!-- Overall Sales -->
+                <div class="flex justify-end">
+                    <div class="text-right">
+                        <div class="flex items-center gap-2 text-amber-400 text-xs font-medium tracking-widest justify-end">
+                            <span class="text-2xl">🔥</span>
+                            OVERALL SALES
+                        </div>
+                        <div id="overall-sales" class="text-5xl font-semibold title-font tracking-tighter mt-2">15,830,976</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Charts -->
+        <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Sign No Split -->
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <div class="flex items-center justify-center gap-3 mb-6">
+                    <span class="text-2xl">📊</span>
+                    <h3 class="font-semibold text-xl text-zinc-800">Sign no. split</h3>
+                </div>
+                <div class="relative">
+                    <canvas id="signPie" class="mx-auto" style="max-height: 320px;"></canvas>
+                </div>
+                <div class="flex justify-center gap-6 mt-6 text-xs">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-blue-600"></div>
+                        <span class="text-zinc-600">Therapist</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                        <span class="text-zinc-600">CSE</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-orange-500"></div>
+                        <span class="text-zinc-600">Call centre</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-violet-600"></div>
+                        <span class="text-zinc-600">AI agent</span>
+                    </div>
+                </div>
+                <div class="text-center text-[10px] text-zinc-400 mt-2">by channel</div>
+            </div>
+
+            <!-- Sales Split -->
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <div class="flex items-center justify-center gap-3 mb-6">
+                    <span class="text-2xl">🔥</span>
+                    <h3 class="font-semibold text-xl text-zinc-800">Sales split</h3>
+                </div>
+                <div class="relative">
+                    <canvas id="salesPie" class="mx-auto" style="max-height: 320px;"></canvas>
+                </div>
+                <div class="flex justify-center gap-6 mt-6 text-xs">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-blue-600"></div>
+                        <span class="text-zinc-600">Therapist</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                        <span class="text-zinc-600">CSE</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-orange-500"></div>
+                        <span class="text-zinc-600">Call centre</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-violet-600"></div>
+                        <span class="text-zinc-600">AI agent</span>
+                    </div>
+                </div>
+                <div class="text-center text-[10px] text-zinc-400 mt-2">by channel</div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center text-xs text-zinc-400">
+            Change any number below — all overalls, pies and calculations update instantly
+        </div>
+    </div>
+
+    <script>
+        // Channel data model (using original image values)
+        let channels = [
+            {
+                id: "therapist",
+                name: "Therapist",
+                color: "#2563eb",
+                audience: 3640,
+                reach: 70,
+                self_act: 70,
+                node_act: 70,
+                show: 30,
+                sign: 30,
+                tail_book: 900,
+                repl_no: 20,
+                show_tail: 30,
+                sign_tail: 20,
+                sales: 6856896
+            },
+            {
+                id: "cse",
+                name: "CSE",
+                color: "#16a34a",
+                audience: 2000,
+                reach: 70,
+                self_act: 90,
+                node_act: 90,
+                show: 70,
+                sign: 30,
+                tail_book: 630,
+                repl_no: 20,
+                show_tail: 30,
+                sign_tail: 20,
+                sales: 4838400
+            },
+            {
+                id: "call",
+                name: "Call centre",
+                color: "#f59e0b",
+                audience: 2200,
+                reach: 20,
+                self_act: 20,
+                node_act: 20,
+                show: 70,
+                sign: 30,
+                tail_book: 0,
+                repl_no: 0,
+                show_tail: 0,
+                sign_tail: 0,
+                sales: 295680
+            },
+            {
+                id: "ai",
+                name: "AI agent",
+                color: "#8b5cf6",
+                audience: 100000,
+                reach: 10,
+                self_act: 10,
+                node_act: 10,
+                show: 70,
+                sign: 30,
+                tail_book: 500,
+                repl_no: 20,
+                show_tail: 30,
+                sign_tail: 20,
+                sales: 3840000
+            }
+        ]
+
+        // Chart instances
+        let signChart = null
+        let salesChart = null
+
+        // Create the four cards dynamically
+        function createCards() {
+            const container = document.getElementById("cards")
+            container.innerHTML = ""
+
+            channels.forEach(channel => {
+                const cardHTML = `
+                    <div class="card bg-white rounded-3xl shadow-xl p-6 border border-zinc-100" id="card-${channel.id}">
+                        <!-- Header -->
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-2xl flex items-center justify-center text-2xl" 
+                                     style="background-color: ${channel.color}20; color: ${channel.color}">
+                                    ${channel.id === "therapist" ? "🧠" : 
+                                      channel.id === "cse" ? "📞" : 
+                                      channel.id === "call" ? "🏢" : "🤖"}
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-xl text-zinc-900">${channel.name}</div>
+                                </div>
+                            </div>
+                            <div id="${channel.id}-sales-badge" 
+                                 class="bg-zinc-900 text-white text-sm font-mono px-6 py-2.5 rounded-3xl shadow-inner">
+                                ${channel.sales.toLocaleString("en-US")}
+                            </div>
+                        </div>
+
+                        <!-- Metrics -->
+                        <div class="space-y-5">
+                            <!-- Audience -->
+                            <div class="flex items-center justify-between">
+                                <span class="metric-label">Audience</span>
+                                <input type="number" id="${channel.id}-audience" value="${channel.audience}" 
+                                       class="w-28 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                            </div>
+                            
+                            <!-- Reach % -->
+                            <div class="flex items-center justify-between">
+                                <span class="metric-label">Reach %</span>
+                                <div class="flex items-center gap-1">
+                                    <input type="number" id="${channel.id}-reach" value="${channel.reach}" 
+                                           class="w-20 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                                    <span class="text-zinc-400 text-sm">%</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Self act % -->
+                            <div class="flex items-center justify-between">
+                                <span class="metric-label">Self act %</span>
+                                <div class="flex items-center gap-1">
+                                    <input type="number" id="${channel.id}-self_act" value="${channel.self_act}" 
+                                           class="w-20 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                                    <span class="text-zinc-400 text-sm">%</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Node act % -->
+                            <div class="flex items-center justify-between">
+                                <span class="metric-label">Node act %</span>
+                                <div class="flex items-center gap-1">
+                                    <input type="number" id="${channel.id}-node_act" value="${channel.node_act}" 
+                                           class="w-20 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                                    <span class="text-zinc-400 text-sm">%</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Show % -->
+                            <div class="flex items-center justify-between">
+                                <span class="metric-label">Show %</span>
+                                <div class="flex items-center gap-1">
+                                    <input type="number" id="${channel.id}-show" value="${channel.show}" 
+                                           class="w-20 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                                    <span class="text-zinc-400 text-sm">%</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Sign % -->
+                            <div class="flex items-center justify-between">
+                                <span class="metric-label">Sign %</span>
+                                <div class="flex items-center gap-1">
+                                    <input type="number" id="${channel.id}-sign" value="${channel.sign}" 
+                                           class="w-20 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                                    <span class="text-zinc-400 text-sm">%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tail Replication -->
+                        <div class="mt-10 pt-6 border-t border-zinc-100">
+                            <div class="uppercase text-[10px] font-mono tracking-[1px] text-amber-500 mb-4 flex items-center gap-2">
+                                <span class="text-base">📋</span>
+                                TAIL REPLICATION
+                            </div>
+                            <div class="space-y-5">
+                                <div class="flex items-center justify-between">
+                                    <span class="metric-label">Tail book #</span>
+                                    <input type="number" id="${channel.id}-tail_book" value="${channel.tail_book}" 
+                                           class="w-28 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="metric-label">Repl no.</span>
+                                    <input type="number" id="${channel.id}-repl_no" value="${channel.repl_no}" 
+                                           class="w-28 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="metric-label">Show tail %</span>
+                                    <div class="flex items-center gap-1">
+                                        <input type="number" id="${channel.id}-show_tail" value="${channel.show_tail}" 
+                                               class="w-20 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                                        <span class="text-zinc-400 text-sm">%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="metric-label">Sign tail %</span>
+                                    <div class="flex items-center gap-1">
+                                        <input type="number" id="${channel.id}-sign_tail" value="${channel.sign_tail}" 
+                                               class="w-20 text-right bg-zinc-50 border border-zinc-200 focus:border-amber-400 rounded-2xl px-4 py-2 text-sm font-medium">
+                                        <span class="text-zinc-400 text-sm">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sales Input (now editable to override calculations) -->
+                        <div class="mt-10 pt-6 border-t border-zinc-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🔥</span>
+                                <span class="font-medium text-zinc-700">Sales</span>
+                            </div>
+                            <input type="number" id="${channel.id}-sales" value="${channel.sales}" 
+                                   class="w-40 text-right font-mono text-2xl font-semibold bg-transparent border-b-2 border-zinc-200 focus:border-amber-400 outline-none">
+                        </div>
+                    </div>
+                `
+                container.innerHTML += cardHTML
+            })
+        }
+
+        // Calculate all derived values
+        function calculateAll() {
+            let totalReached = 0
+            let weightedSelfAct = 0   // for overall self activation %
+            let totalSignNo = 0
+            let totalSales = 0
+            let totalTailBook = 0
+
+            const signData = []
+            const salesData = []
+
+            channels.forEach(channel => {
+                // Reached audience
+                const reached = channel.audience * (channel.reach / 100)
+                
+                // Self activation (for overall self book %)
+                const selfActivated = reached * (channel.self_act / 100)
+
+                // Main sign calculation (funnel) — using node_act, show, sign
+                const mainSign = channel.audience * 
+                                (channel.reach / 100) * 
+                                (channel.node_act / 100) * 
+                                (channel.show / 100) * 
+                                (channel.sign / 100)
+
+                // Tail sign calculation
+                const tailSign = channel.tail_book * 
+                                channel.repl_no * 
+                                (channel.show_tail / 100) * 
+                                (channel.sign_tail / 100)
+
+                // Total sign no. per channel
+                const signNo = mainSign + tailSign
+                channel.signNo = signNo   // store for charts
+
+                // Accumulate for overalls
+                totalReached += reached
+                weightedSelfAct += selfActivated
+                totalSignNo += signNo
+                totalSales += channel.sales
+                totalTailBook += channel.tail_book
+
+                signData.push(Math.round(signNo * 100) / 100)
+                salesData.push(channel.sales)
+            })
+
+            // Overall calculations
+            const overallSelfAct = totalReached > 0 ? 
+                (weightedSelfAct / totalReached * 100) : 0
+
+            const overallRepl = totalTailBook
+            const overallSign = totalSignNo
+            const overallSales = totalSales
+
+            // Update overall displays
+            document.getElementById("overall-node-act").textContent = overallSelfAct.toFixed(2) + "%"
+            document.getElementById("overall-repl").textContent = overallRepl.toFixed(2)
+            document.getElementById("overall-sign").textContent = overallSign.toFixed(2)
+            document.getElementById("overall-sales").textContent = overallSales.toLocaleString("en-US")
+
+            // Update sales badges
+            channels.forEach(channel => {
+                const badge = document.getElementById(`${channel.id}-sales-badge`)
+                if (badge) badge.textContent = channel.sales.toLocaleString("en-US")
+            })
+
+            // Update charts
+            if (signChart) {
+                signChart.data.datasets[0].data = signData
+                signChart.update()
+            }
+            if (salesChart) {
+                salesChart.data.datasets[0].data = salesData
+                salesChart.update()
+            }
+        }
+
+        // Attach listeners to all inputs
+        function attachListeners() {
+            const fields = [
+                "audience", "reach", "self_act", "node_act", "show", "sign",
+                "tail_book", "repl_no", "show_tail", "sign_tail", "sales"
+            ]
+
+            channels.forEach(channel => {
+                fields.forEach(field => {
+                    const input = document.getElementById(`${channel.id}-${field}`)
+                    if (input) {
+                        input.addEventListener("input", function() {
+                            let value = parseFloat(this.value)
+                            if (isNaN(value)) value = 0
+                            
+                            // Update model
+                            channel[field] = value
+                            
+                            // Recalculate everything
+                            calculateAll()
+                        })
+                    }
+                })
+            })
+        }
+
+        // Initialize Chart.js pies
+        function initCharts() {
+            // Sign Pie
+            const signCtx = document.getElementById("signPie")
+            if (!signCtx) return
+            signChart = new Chart(signCtx, {
+                type: "pie",
+                data: {
+                    labels: channels.map(c => c.name),
+                    datasets: [{
+                        data: [],
+                        backgroundColor: channels.map(c => c.color),
+                        borderWidth: 6,
+                        borderColor: "#ffffff"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: "65%",
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: "#1f2937",
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 18, weight: "600" },
+                            displayColors: false,
+                            callbacks: {
+                                label: (ctx) => ctx.raw.toLocaleString("en-US")
+                            }
+                        }
+                    }
+                }
+            })
+
+            // Sales Pie
+            const salesCtx = document.getElementById("salesPie")
+            if (!salesCtx) return
+            salesChart = new Chart(salesCtx, {
+                type: "pie",
+                data: {
+                    labels: channels.map(c => c.name),
+                    datasets: [{
+                        data: [],
+                        backgroundColor: channels.map(c => c.color),
+                        borderWidth: 6,
+                        borderColor: "#ffffff"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: "65%",
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: "#1f2937",
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 18, weight: "600" },
+                            displayColors: false,
+                            callbacks: {
+                                label: (ctx) => ctx.raw.toLocaleString("en-US")
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+        // Main initialization
+        function initialize() {
+            createCards()
+            initCharts()
+            attachListeners()
+            
+            // First calculation
+            calculateAll()
+            
+            // Keyboard support: press "/" to focus first input
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "/" && document.activeElement.tagName !== "INPUT") {
+                    e.preventDefault()
+                    const firstInput = document.querySelector("input[type='number']")
+                    if (firstInput) firstInput.focus()
+                }
+            })
+        }
+
+        // Boot the app
+        window.onload = initialize
+    </script>
+</body>
+</html>
