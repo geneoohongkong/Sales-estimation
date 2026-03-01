@@ -3,24 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSE · single linked box</title>
+    <title>Therapist + CSE · two boxes + total</title>
     <style>
         * { box-sizing: border-box; margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
-        body { background: #f2f5fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+        body { background: #f0f4fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1.5rem; }
+        .wrapper { max-width: 1000px; width: 100%; }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
         .card {
             background: white;
             border-radius: 28px;
-            padding: 1.8rem 1.8rem 1.8rem 1.8rem;
-            width: 420px;
-            box-shadow: 0 15px 30px -8px rgba(0,30,50,0.15);
+            padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+            box-shadow: 0 15px 30px -8px rgba(0,30,50,0.12);
             border: 1px solid #dce6f0;
         }
-        h3 {
+        .card h3 {
             font-size: 1.8rem;
             font-weight: 600;
             background: #e5edf8;
             display: inline-block;
-            padding: 0.15rem 1.5rem;
+            padding: 0.1rem 1.5rem;
             border-radius: 50px;
             margin-bottom: 0.8rem;
             color: #113355;
@@ -81,137 +87,213 @@
             letter-spacing: 0.3px;
             margin-bottom: 0.5rem;
         }
-        .attribution { text-align: center; color: #5f748e; font-size: 0.8rem; margin-top: 1.5rem; }
+        .total-panel {
+            background: #102a41;
+            color: white;
+            border-radius: 40px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0 1rem;
+        }
+        .total-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .total-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+        .total-number {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .total-number.small {
+            font-size: 1.6rem;
+        }
+        .footer-note {
+            text-align: center;
+            color: #4b637b;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
-<div class="card">
-    <h3>CSE</h3>
+<div class="wrapper">
+    <h2 style="margin-bottom: 1.2rem; font-weight: 500; color: #1e3f60;">⚡ Therapist + CSE · linked totals</h2>
 
-    <!-- Sales field (readonly, auto computed) -->
-    <div class="sales-row">
-        <span>💰 Sales</span>
-        <input type="number" id="salesCse" value="4838400" step="any" readonly>
-    </div>
+    <!-- two boxes row -->
+    <div class="row">
+        <!-- THERAPIST CARD -->
+        <div class="card">
+            <h3>Therapist</h3>
+            <div class="sales-row">
+                <span>💰 Sales</span>
+                <input type="number" id="salesTher" value="6856896" step="any" readonly>
+            </div>
+            <div class="line"><span class="label">Audience</span> <input type="number" id="therAud" value="3640" step="1" min="0"></div>
+            <div class="line"><span class="label">Reach %</span> <input type="number" id="therReach" value="70" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Self act %</span> <input type="number" id="therSelf" value="70" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Node act %</span> <input type="number" id="therNode" value="70" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Show %</span> <input type="number" id="therShow" value="30" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Sign %</span> <input type="number" id="therSign" value="30" step="any" min="0" max="100"></div>
+            <div class="tail-block">
+                <div class="tail-title">🔁 TAIL REPLICATION</div>
+                <div class="line"><span class="label">Tail book #</span> <input type="number" id="therTail" value="900" step="any" min="0"></div>
+                <div class="line"><span class="label">Repl no.</span> <input type="number" id="therRepl" value="20" step="any" min="0"></div>
+                <div class="line"><span class="label">Show tail %</span> <input type="number" id="therTshow" value="30" step="any" min="0" max="100"></div>
+                <div class="line"><span class="label">Sign tail %</span> <input type="number" id="therTsign" value="20" step="any" min="0" max="100"></div>
+            </div>
+        </div>
 
-    <!-- main funnel inputs -->
-    <div class="line">
-        <span class="label">Audience</span>
-        <input type="number" id="aud" value="2000" step="1" min="0">
-    </div>
-    <div class="line">
-        <span class="label">Reach %</span>
-        <input type="number" id="reach" value="70" step="any" min="0" max="100">
-    </div>
-    <div class="line">
-        <span class="label">Self act %</span>
-        <input type="number" id="selfAct" value="90" step="any" min="0" max="100">
-    </div>
-    <div class="line">
-        <span class="label">Node act %</span>
-        <input type="number" id="nodeAct" value="90" step="any" min="0" max="100">
-    </div>
-    <div class="line">
-        <span class="label">Show %</span>
-        <input type="number" id="show" value="70" step="any" min="0" max="100">
-    </div>
-    <div class="line">
-        <span class="label">Sign %</span>
-        <input type="number" id="sign" value="30" step="any" min="0" max="100">
-    </div>
-
-    <!-- tail replication block -->
-    <div class="tail-block">
-        <div class="tail-title">🔁 TAIL REPLICATION</div>
-        <div class="line">
-            <span class="label">Tail book #</span>
-            <input type="number" id="tailBook" value="630" step="any" min="0">
-        </div>
-        <div class="line">
-            <span class="label">Repl no.</span>
-            <input type="number" id="replNo" value="20" step="any" min="0">
-        </div>
-        <div class="line">
-            <span class="label">Show tail %</span>
-            <input type="number" id="tailShow" value="30" step="any" min="0" max="100">
-        </div>
-        <div class="line">
-            <span class="label">Sign tail %</span>
-            <input type="number" id="tailSign" value="20" step="any" min="0" max="100">
+        <!-- CSE CARD -->
+        <div class="card">
+            <h3>CSE</h3>
+            <div class="sales-row">
+                <span>💰 Sales</span>
+                <input type="number" id="salesCse" value="4838400" step="any" readonly>
+            </div>
+            <div class="line"><span class="label">Audience</span> <input type="number" id="cseAud" value="2000" step="1" min="0"></div>
+            <div class="line"><span class="label">Reach %</span> <input type="number" id="cseReach" value="70" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Self act %</span> <input type="number" id="cseSelf" value="90" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Node act %</span> <input type="number" id="cseNode" value="90" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Show %</span> <input type="number" id="cseShow" value="70" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Sign %</span> <input type="number" id="cseSign" value="30" step="any" min="0" max="100"></div>
+            <div class="tail-block">
+                <div class="tail-title">🔁 TAIL REPLICATION</div>
+                <div class="line"><span class="label">Tail book #</span> <input type="number" id="cseTail" value="630" step="any" min="0"></div>
+                <div class="line"><span class="label">Repl no.</span> <input type="number" id="cseRepl" value="20" step="any" min="0"></div>
+                <div class="line"><span class="label">Show tail %</span> <input type="number" id="cseTshow" value="30" step="any" min="0" max="100"></div>
+                <div class="line"><span class="label">Sign tail %</span> <input type="number" id="cseTsign" value="20" step="any" min="0" max="100"></div>
+            </div>
         </div>
     </div>
 
-    <div class="attribution">
-        ⚡ any change → sales updates · fixed ticket from original
+    <!-- TOTAL PANEL (combined sales, sign, tail) -->
+    <div class="total-panel">
+        <div class="total-item">
+            <span class="total-label">Total sales (both)</span>
+            <span class="total-number" id="totalSales">11,695,296</span>
+        </div>
+        <div class="total-item">
+            <span class="total-label">Combined sign no.</span>
+            <span class="total-number small" id="totalSign">0.00</span>
+        </div>
+        <div class="total-item">
+            <span class="total-label">Tail book sum</span>
+            <span class="total-number small" id="totalTail">1530.00</span>
+        </div>
+        <div class="total-item">
+            <span class="total-label">Self act % (avg)</span>
+            <span class="total-number small" id="totalActPct">0.00%</span>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        ⚡ change any number → sales & totals update automatically · fixed ticket from original
     </div>
 </div>
 
 <script>
-    (function() {
-        // ---- get elements ----
-        const audInp = document.getElementById('aud');
-        const reachInp = document.getElementById('reach');
-        const selfInp = document.getElementById('selfAct');      // not used in sales, only for demo (could be used)
-        const nodeInp = document.getElementById('nodeAct');
-        const showInp = document.getElementById('show');
-        const signInp = document.getElementById('sign');
-        const tailBookInp = document.getElementById('tailBook');
-        const replNoInp = document.getElementById('replNo');
-        const tailShowInp = document.getElementById('tailShow');
-        const tailSignInp = document.getElementById('tailSign');
-        const salesField = document.getElementById('salesCse');
+(function() {
+    // --- helper ---
+    const get = (id) => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; };
 
-        // ---- helper to read float ----
-        const get = (el) => { const v = parseFloat(el.value); return isNaN(v) ? 0 : v; };
+    // --- pre‑compute ticket factors (sales per total sign) from original values ---
+    // Therapist original
+    const tAud = 3640, tReach = 70, tNode = 70, tShow = 30, tSign = 30;
+    const tTail = 900, tRepl = 20, tTshow = 30, tTsign = 20, tSales = 6856896;
+    const tReached = tAud * (tReach/100);
+    const tNodeAct = tReached * (tNode/100);
+    const tShows = tNodeAct * (tShow/100);
+    const tPrimSign = tShows * (tSign/100);
+    const tTailSign = tTail * tRepl * (tTshow/100) * (tTsign/100);
+    const tTotalSign = tPrimSign + tTailSign;
+    const ticketTher = tTotalSign > 0 ? tSales / tTotalSign : 0;
 
-        // ---- pre‑compute fixed ticket from the original CSE values ----
-        // original numbers: aud=2000, reach=70, nodeAct=90, show=70, sign=30,
-        // tailBook=630, replNo=20, tailShow=30, tailSign=20, sales=4838400
-        const origAud = 2000, origReach = 70, origNode = 90, origShow = 70, origSign = 30;
-        const origTail = 630, origRepl = 20, origTshow = 30, origTsign = 20;
-        const origSales = 4838400;
+    // CSE original
+    const cAud = 2000, cReach = 70, cNode = 90, cShow = 70, cSign = 30;
+    const cTail = 630, cRepl = 20, cTshow = 30, cTsign = 20, cSales = 4838400;
+    const cReached = cAud * (cReach/100);
+    const cNodeAct = cReached * (cNode/100);
+    const cShows = cNodeAct * (cShow/100);
+    const cPrimSign = cShows * (cSign/100);
+    const cTailSign = cTail * cRepl * (cTshow/100) * (cTsign/100);
+    const cTotalSign = cPrimSign + cTailSign;
+    const ticketCse = cTotalSign > 0 ? cSales / cTotalSign : 0;
 
-        const origReached = origAud * (origReach/100);
-        const origNodeAct = origReached * (origNode/100);
-        const origShows = origNodeAct * (origShow/100);
-        const origPrimSign = origShows * (origSign/100);
-        const origTailSign = origTail * origRepl * (origTshow/100) * (origTsign/100);
-        const origTotalSign = origPrimSign + origTailSign;
-        const ticket = origTotalSign > 0 ? origSales / origTotalSign : 0;   // ≈ 860.5  (but we keep precise)
+    // --- update function ---
+    function refresh() {
+        // --- THERAPIST ---
+        const therAud = get('therAud');
+        const therReach = get('therReach')/100;
+        const therNode = get('therNode')/100;
+        const therShow = get('therShow')/100;
+        const therSign = get('therSign')/100;
+        const therTail = get('therTail');
+        const therRepl = get('therRepl');
+        const therTshow = get('therTshow')/100;
+        const therTsign = get('therTsign')/100;
 
-        // ---- update function ----
-        function refresh() {
-            const aud = get(audInp);
-            const reach = get(reachInp) / 100;
-            const node = get(nodeInp) / 100;
-            const show = get(showInp) / 100;
-            const sign = get(signInp) / 100;
+        const therReached = therAud * therReach;
+        const therNodeAct = therReached * therNode;
+        const therShows = therNodeAct * therShow;
+        const therPrimSign = therShows * therSign;
+        const therTailSign = therTail * therRepl * therTshow * therTsign;
+        const therTotalSign = therPrimSign + therTailSign;
+        const therSales = therTotalSign * ticketTher;
+        document.getElementById('salesTher').value = Math.round(therSales);
 
-            const tailBook = get(tailBookInp);
-            const replNo = get(replNoInp);
-            const tailShow = get(tailShowInp) / 100;
-            const tailSign = get(tailSignInp) / 100;
+        // --- CSE ---
+        const cseAud = get('cseAud');
+        const cseReach = get('cseReach')/100;
+        const cseNode = get('cseNode')/100;
+        const cseShow = get('cseShow')/100;
+        const cseSign = get('cseSign')/100;
+        const cseTail = get('cseTail');
+        const cseRepl = get('cseRepl');
+        const cseTshow = get('cseTshow')/100;
+        const cseTsign = get('cseTsign')/100;
 
-            const reached = aud * reach;
-            const nodeAct = reached * node;
-            const shows = nodeAct * show;
-            const primarySigners = shows * sign;
+        const cseReached = cseAud * cseReach;
+        const cseNodeAct = cseReached * cseNode;
+        const cseShows = cseNodeAct * cseShow;
+        const csePrimSign = cseShows * cseSign;
+        const cseTailSign = cseTail * cseRepl * cseTshow * cseTsign;
+        const cseTotalSign = csePrimSign + cseTailSign;
+        const cseSales = cseTotalSign * ticketCse;
+        document.getElementById('salesCse').value = Math.round(cseSales);
 
-            const tailSigners = tailBook * replNo * tailShow * tailSign;
-            const totalSign = primarySigners + tailSigners;
+        // --- totals ---
+        const totalSalesVal = therSales + cseSales;
+        const totalSignVal = therTotalSign + cseTotalSign;
+        const totalTailVal = therTail + cseTail;
+        // weighted self activation % (selfAct * reached)
+        const therSelfPct = get('therSelf')/100;
+        const cseSelfPct = get('cseSelf')/100;
+        const totalSelfAct = (therReached * therSelfPct) + (cseReached * cseSelfPct);
+        const totalReached = therReached + cseReached;
+        const avgSelfAct = totalReached > 0 ? (totalSelfAct / totalReached) * 100 : 0;
 
-            const sales = totalSign * ticket;
-            salesField.value = Math.round(sales);
-        }
+        // update DOM
+        document.getElementById('totalSales').innerText = Math.round(totalSalesVal).toLocaleString();
+        document.getElementById('totalSign').innerText = totalSignVal.toFixed(2);
+        document.getElementById('totalTail').innerText = totalTailVal.toFixed(2);
+        document.getElementById('totalActPct').innerText = avgSelfAct.toFixed(2) + '%';
+    }
 
-        // ---- attach event listeners to all inputs (except readonly sales) ----
-        const inputs = [audInp, reachInp, selfInp, nodeInp, showInp, signInp,
-                        tailBookInp, replNoInp, tailShowInp, tailSignInp];
-        inputs.forEach(inp => inp.addEventListener('input', refresh));
+    // --- bind all inputs (except readonly sales) ---
+    const inputs = document.querySelectorAll('input:not([readonly])');
+    inputs.forEach(inp => inp.addEventListener('input', refresh));
 
-        // ---- initial call to display correct sales ----
-        refresh();
-    })();
+    // --- initial update ---
+    refresh();
+})();
 </script>
 </body>
 </html>
