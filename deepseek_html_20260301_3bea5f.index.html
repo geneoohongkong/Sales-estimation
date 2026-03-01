@@ -3,63 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Therapist + CSE · two linked boxes</title>
+    <title>CSE · single linked box</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #f4f7fb; }
-        .card { transition: all 0.15s ease; }
+        body { font-family: 'Inter', sans-serif; background: #f4f7fb; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
+        .card { transition: all 0.15s ease; max-width: 480px; width: 100%; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); }
         input[type="number"] { transition: all 0.15s; }
         input[type="number"]:focus { outline: none; ring: 2px solid #fbbf24; border-color: #f59e0b; }
         .metric-label { font-size: 0.875rem; color: #4b5563; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
-    <div class="max-w-4xl w-full">
-        <!-- simple header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-semibold text-gray-800 tracking-tight">📊 therapist · cse</h1>
-            <p class="text-gray-500 text-sm mt-1">edit any number — sales auto‑update independently</p>
+<body>
+    <div class="card bg-white rounded-3xl shadow-md p-6 border border-gray-100">
+        <!-- header with emoji and name -->
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xl bg-emerald-50 text-emerald-600">📞</div>
+                <span class="font-semibold text-xl text-gray-800">CSE</span>
+            </div>
+            <div id="cse-badge" class="bg-gray-800 text-white text-sm font-mono px-5 py-2 rounded-2xl shadow-inner">
+                4,838,400
+            </div>
         </div>
 
-        <!-- two cards in a row -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="cardContainer"></div>
+        <!-- main funnel metrics -->
+        <div class="space-y-4">
+            <!-- Audience -->
+            <div class="flex items-center justify-between">
+                <span class="metric-label">Audience</span>
+                <input type="number" id="cse-audience" value="2000" class="w-24 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+            </div>
+            <!-- Reach % -->
+            <div class="flex items-center justify-between">
+                <span class="metric-label">Reach %</span>
+                <div class="flex items-center">
+                    <input type="number" id="cse-reach" value="70" class="w-20 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+                    <span class="text-gray-400 text-sm ml-1">%</span>
+                </div>
+            </div>
+            <!-- Self act % -->
+            <div class="flex items-center justify-between">
+                <span class="metric-label">Self act %</span>
+                <div class="flex items-center">
+                    <input type="number" id="cse-selfAct" value="90" class="w-20 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+                    <span class="text-gray-400 text-sm ml-1">%</span>
+                </div>
+            </div>
+            <!-- Node act % -->
+            <div class="flex items-center justify-between">
+                <span class="metric-label">Node act %</span>
+                <div class="flex items-center">
+                    <input type="number" id="cse-nodeAct" value="90" class="w-20 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+                    <span class="text-gray-400 text-sm ml-1">%</span>
+                </div>
+            </div>
+            <!-- Show % -->
+            <div class="flex items-center justify-between">
+                <span class="metric-label">Show %</span>
+                <div class="flex items-center">
+                    <input type="number" id="cse-show" value="70" class="w-20 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+                    <span class="text-gray-400 text-sm ml-1">%</span>
+                </div>
+            </div>
+            <!-- Sign % -->
+            <div class="flex items-center justify-between">
+                <span class="metric-label">Sign %</span>
+                <div class="flex items-center">
+                    <input type="number" id="cse-sign" value="30" class="w-20 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+                    <span class="text-gray-400 text-sm ml-1">%</span>
+                </div>
+            </div>
+        </div>
 
-        <!-- tiny footer (no totals) -->
-        <div class="text-center text-xs text-gray-400 mt-10">
-            each box works independently · sales recalculated from funnel
+        <!-- tail replication section -->
+        <div class="mt-8 pt-5 border-t border-gray-100">
+            <div class="text-[10px] font-mono tracking-wider text-amber-500 mb-4 flex items-center gap-1">
+                <span>📋</span> TAIL REPLICATION
+            </div>
+            <div class="space-y-4">
+                <!-- Tail book # -->
+                <div class="flex items-center justify-between">
+                    <span class="metric-label">Tail book #</span>
+                    <input type="number" id="cse-tailBook" value="630" class="w-24 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+                </div>
+                <!-- Repl no. -->
+                <div class="flex items-center justify-between">
+                    <span class="metric-label">Repl no.</span>
+                    <input type="number" id="cse-replNo" value="20" class="w-24 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+                </div>
+                <!-- Show tail % -->
+                <div class="flex items-center justify-between">
+                    <span class="metric-label">Show tail %</span>
+                    <div class="flex items-center">
+                        <input type="number" id="cse-tailShow" value="30" class="w-20 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+                        <span class="text-gray-400 text-sm ml-1">%</span>
+                    </div>
+                </div>
+                <!-- Sign tail % -->
+                <div class="flex items-center justify-between">
+                    <span class="metric-label">Sign tail %</span>
+                    <div class="flex items-center">
+                        <input type="number" id="cse-tailSign" value="20" class="w-20 text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2 text-sm font-medium focus:border-amber-400">
+                        <span class="text-gray-400 text-sm ml-1">%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- sales field (editable but linked) -->
+        <div class="mt-8 pt-5 border-t border-gray-100 flex items-center justify-between">
+            <span class="flex items-center gap-2 text-base font-medium text-gray-700">
+                <span class="text-2xl">🔥</span> Sales
+            </span>
+            <input type="number" id="cse-sales" value="4838400" class="w-40 text-right font-mono text-2xl font-semibold bg-transparent border-b-2 border-gray-200 focus:border-amber-400 outline-none">
+        </div>
+
+        <!-- tiny footnote -->
+        <div class="text-center text-xs text-gray-400 mt-6">
+            change any number — sales recalculates automatically
         </div>
     </div>
 
     <script>
-        // ----- data for two channels: Therapist & CSE -----
-        const channels = [
-            {
-                id: 'ther',
-                name: 'Therapist',
-                color: '#2563eb',
-                emoji: '🧠',
-                audience: 3640,
-                reach: 70,
-                selfAct: 70,
-                nodeAct: 70,
-                show: 30,
-                sign: 30,
-                tailBook: 900,
-                replNo: 20,
-                tailShow: 30,
-                tailSign: 20,
-                sales: 6856896
-            },
-            {
-                id: 'cse',
-                name: 'CSE',
-                color: '#16a34a',
-                emoji: '📞',
+        (function() {
+            // ----- original CSE values (used for ticket calculation) -----
+            const original = {
                 audience: 2000,
                 reach: 70,
-                selfAct: 90,
                 nodeAct: 90,
                 show: 70,
                 sign: 30,
@@ -68,184 +140,77 @@
                 tailShow: 30,
                 tailSign: 20,
                 sales: 4838400
+            };
+
+            // ----- compute fixed ticket (sales per total signer) from original -----
+            const origReached = original.audience * (original.reach / 100);
+            const origMainSign = origReached * (original.nodeAct / 100) * (original.show / 100) * (original.sign / 100);
+            const origTailSign = original.tailBook * original.replNo * (original.tailShow / 100) * (original.tailSign / 100);
+            const origTotalSign = origMainSign + origTailSign;
+            const ticket = origTotalSign > 0 ? original.sales / origTotalSign : 0;
+
+            // ----- helper to get float value from input -----
+            function getVal(id) {
+                const el = document.getElementById(id);
+                if (!el) return 0;
+                const v = parseFloat(el.value);
+                return isNaN(v) ? 0 : v;
             }
-        ];
 
-        // ----- pre‑compute fixed ticket (sales per total signer) from original values -----
-        function computeOriginalTicket(ch) {
-            const reached = ch.audience * (ch.reach / 100);
-            const mainSign = reached * (ch.nodeAct / 100) * (ch.show / 100) * (ch.sign / 100);
-            const tailSign = ch.tailBook * ch.replNo * (ch.tailShow / 100) * (ch.tailSign / 100);
-            const totalSign = mainSign + tailSign;
-            return totalSign > 0 ? ch.sales / totalSign : 0;
-        }
+            // ----- update sales based on current inputs -----
+            function updateSales() {
+                const audience = getVal('cse-audience');
+                const reach = getVal('cse-reach') / 100;
+                const nodeAct = getVal('cse-nodeAct') / 100;
+                const show = getVal('cse-show') / 100;
+                const sign = getVal('cse-sign') / 100;
+                const tailBook = getVal('cse-tailBook');
+                const replNo = getVal('cse-replNo');
+                const tailShow = getVal('cse-tailShow') / 100;
+                const tailSign = getVal('cse-tailSign') / 100;
 
-        // store tickets separately
-        const tickets = channels.map(ch => computeOriginalTicket(ch));
+                // main funnel signers
+                const reached = audience * reach;
+                const mainSigners = reached * nodeAct * show * sign;
 
-        // ----- helper to build input rows -----
-        function createRow(label, id, value, unit = '', width = 'w-20') {
-            const unitSpan = unit ? `<span class="text-gray-400 text-sm ml-1">${unit}</span>` : '';
-            return `
-                <div class="flex items-center justify-between">
-                    <span class="metric-label">${label}</span>
-                    <div class="flex items-center">
-                        <input type="number" id="${id}" value="${value}" 
-                               class="${width} text-right bg-gray-50 border border-gray-200 rounded-2xl px-3 py-1.5 text-sm font-medium focus:border-amber-400">
-                        ${unitSpan}
-                    </div>
-                </div>
-            `;
-        }
+                // tail signers
+                const tailSigners = tailBook * replNo * tailShow * tailSign;
 
-        // ----- render both cards -----
-        function renderCards() {
-            const container = document.getElementById('cardContainer');
-            container.innerHTML = '';
+                const totalSigners = mainSigners + tailSigners;
+                const newSales = Math.round(totalSigners * ticket);
 
-            channels.forEach((ch, idx) => {
-                const cardId = `card-${ch.id}`;
-                const salesId = `sales-${ch.id}`;
+                // update sales input field
+                const salesInput = document.getElementById('cse-sales');
+                if (salesInput) salesInput.value = newSales;
 
-                const card = document.createElement('div');
-                card.className = 'card bg-white rounded-3xl shadow-md p-5 border border-gray-100';
-                card.innerHTML = `
-                    <div class="flex items-center justify-between mb-5">
-                        <div class="flex items-center gap-2">
-                            <div class="w-7 h-7 rounded-xl flex items-center justify-center text-xl" 
-                                 style="background-color: ${ch.color}15; color: ${ch.color}">${ch.emoji}</div>
-                            <span class="font-semibold text-lg text-gray-800">${ch.name}</span>
-                        </div>
-                        <div id="badge-${ch.id}" class="bg-gray-800 text-white text-xs font-mono px-4 py-2 rounded-2xl shadow-inner">
-                            ${ch.sales.toLocaleString()}
-                        </div>
-                    </div>
+                // update badge
+                const badge = document.getElementById('cse-badge');
+                if (badge) badge.innerText = newSales.toLocaleString();
+            }
 
-                    <div class="space-y-3">
-                        ${createRow('Audience', `${ch.id}-audience`, ch.audience, '', 'w-24')}
-                        ${createRow('Reach %', `${ch.id}-reach`, ch.reach, '%')}
-                        ${createRow('Self act %', `${ch.id}-selfAct`, ch.selfAct, '%')}
-                        ${createRow('Node act %', `${ch.id}-nodeAct`, ch.nodeAct, '%')}
-                        ${createRow('Show %', `${ch.id}-show`, ch.show, '%')}
-                        ${createRow('Sign %', `${ch.id}-sign`, ch.sign, '%')}
-                    </div>
-
-                    <!-- tail replication -->
-                    <div class="mt-6 pt-4 border-t border-gray-100">
-                        <div class="text-[10px] font-mono tracking-wider text-amber-500 mb-3 flex items-center gap-1">
-                            <span>📋</span> TAIL REPLICATION
-                        </div>
-                        <div class="space-y-3">
-                            ${createRow('Tail book #', `${ch.id}-tailBook`, ch.tailBook, '', 'w-24')}
-                            ${createRow('Repl no.', `${ch.id}-replNo`, ch.replNo, '', 'w-24')}
-                            ${createRow('Show tail %', `${ch.id}-tailShow`, ch.tailShow, '%')}
-                            ${createRow('Sign tail %', `${ch.id}-tailSign`, ch.tailSign, '%')}
-                        </div>
-                    </div>
-
-                    <!-- sales (editable, but linked) -->
-                    <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                        <span class="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <span class="text-xl">🔥</span> Sales
-                        </span>
-                        <input type="number" id="${salesId}" value="${ch.sales}" 
-                               class="w-36 text-right font-mono text-xl font-semibold bg-transparent border-b-2 border-gray-200 focus:border-amber-400 outline-none">
-                    </div>
-                `;
-
-                container.appendChild(card);
-            });
-        }
-
-        // ----- update sales for a single channel using its ticket -----
-        function updateChannel(idx) {
-            const ch = channels[idx];
-            const ticket = tickets[idx];
-
-            // read current values
-            const audience = parseFloat(document.getElementById(`${ch.id}-audience`)?.value) || 0;
-            const reach = (parseFloat(document.getElementById(`${ch.id}-reach`)?.value) || 0) / 100;
-            const nodeAct = (parseFloat(document.getElementById(`${ch.id}-nodeAct`)?.value) || 0) / 100;
-            const show = (parseFloat(document.getElementById(`${ch.id}-show`)?.value) || 0) / 100;
-            const sign = (parseFloat(document.getElementById(`${ch.id}-sign`)?.value) || 0) / 100;
-            const tailBook = parseFloat(document.getElementById(`${ch.id}-tailBook`)?.value) || 0;
-            const replNo = parseFloat(document.getElementById(`${ch.id}-replNo`)?.value) || 0;
-            const tailShow = (parseFloat(document.getElementById(`${ch.id}-tailShow`)?.value) || 0) / 100;
-            const tailSign = (parseFloat(document.getElementById(`${ch.id}-tailSign`)?.value) || 0) / 100;
-
-            // main funnel signers
-            const reached = audience * reach;
-            const mainSigners = reached * nodeAct * show * sign;
-
-            // tail signers
-            const tailSigners = tailBook * replNo * tailShow * tailSign;
-
-            const totalSigners = mainSigners + tailSigners;
-            const newSales = Math.round(totalSigners * ticket);
-
-            // update model & input field
-            ch.sales = newSales;
-            const salesInput = document.getElementById(`sales-${ch.id}`);
-            if (salesInput) salesInput.value = newSales;
-
-            // update badge
-            const badge = document.getElementById(`badge-${ch.id}`);
-            if (badge) badge.innerText = newSales.toLocaleString();
-        }
-
-        // ----- update both channels -----
-        function updateAll() {
-            for (let i = 0; i < channels.length; i++) updateChannel(i);
-        }
-
-        // ----- attach listeners to every input (except sales fields to avoid loops) -----
-        function attachListeners() {
-            const fields = [
-                'audience', 'reach', 'selfAct', 'nodeAct', 'show', 'sign',
-                'tailBook', 'replNo', 'tailShow', 'tailSign'
+            // ----- attach listeners to all inputs except the sales field itself -----
+            const inputs = [
+                'cse-audience', 'cse-reach', 'cse-selfAct', 'cse-nodeAct', 'cse-show', 'cse-sign',
+                'cse-tailBook', 'cse-replNo', 'cse-tailShow', 'cse-tailSign'
             ];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updateSales);
+            });
 
-            channels.forEach((ch, idx) => {
-                fields.forEach(f => {
-                    const el = document.getElementById(`${ch.id}-${f}`);
-                    if (el) {
-                        el.addEventListener('input', () => {
-                            // update only this channel (fast)
-                            updateChannel(idx);
-                        });
-                    }
+            // optional: allow manual sales edit (updates badge, no recalc)
+            const salesEl = document.getElementById('cse-sales');
+            if (salesEl) {
+                salesEl.addEventListener('input', function() {
+                    const val = parseFloat(this.value) || 0;
+                    const badge = document.getElementById('cse-badge');
+                    if (badge) badge.innerText = val.toLocaleString();
                 });
+            }
 
-                // also allow manual sales edit – if user changes sales directly, we update model and badge
-                const salesEl = document.getElementById(`sales-${ch.id}`);
-                if (salesEl) {
-                    salesEl.addEventListener('input', function() {
-                        let val = parseFloat(this.value);
-                        if (isNaN(val)) val = 0;
-                        ch.sales = val;
-                        const badge = document.getElementById(`badge-${ch.id}`);
-                        if (badge) badge.innerText = val.toLocaleString();
-                        // no further recalc needed
-                    });
-                }
-            });
-        }
-
-        // ----- initialise everything -----
-        window.onload = () => {
-            renderCards();
-            attachListeners();
-            // set initial sales values (already correct from render, but ensure badges)
-            updateAll();
-
-            // optional: press "/" to focus first input
-            document.addEventListener('keydown', (e) => {
-                if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
-                    e.preventDefault();
-                    document.querySelector('input[type="number"]')?.focus();
-                }
-            });
-        };
+            // initial update to ensure badge matches sales field
+            updateSales();
+        })();
     </script>
 </body>
 </html>
