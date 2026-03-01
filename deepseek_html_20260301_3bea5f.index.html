@@ -3,147 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Estimation</title>
+    <title>Simple Calculator</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f5f7fa; font-family: Arial, sans-serif; padding: 20px; }
-        .container { max-width: 1400px; margin: 0 auto; }
-        h1 { font-size: 24px; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 5px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-        .card { background: white; border: 1px solid #ccc; padding: 15px; border-radius: 5px; }
-        .card h3 { text-align: center; margin-bottom: 10px; color: #2563eb; }
-        .row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #ddd; font-size: 14px; }
-        .label { font-weight: 500; }
-        input { width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px; text-align: right; }
-        .value { font-weight: 600; min-width: 60px; text-align: right; background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
-        .section-title { font-weight: 700; margin: 10px 0 5px 0; font-size: 12px; color: #555; }
-        .total-row { margin-top: 10px; padding-top: 5px; border-top: 2px solid #000; font-weight: 700; }
-        .sales-row { margin-top: 10px; padding-top: 5px; border-top: 2px solid #059669; color: #059669; font-weight: 700; }
-        
-        /* Overall section */
-        .overall-title { font-size: 20px; margin: 30px 0 15px 0; border-bottom: 2px solid #2563eb; padding-bottom: 5px; }
-        .overall-grid { display: grid; grid-template-columns: 1fr 1.5fr 1fr; background: white; border: 1px solid #ccc; border-radius: 5px; padding: 20px; gap: 20px; }
-        .overall-col { border-right: 1px solid #eee; padding-right: 15px; }
-        .overall-col:last-child { border-right: none; }
-        .overall-header { font-weight: 700; margin-bottom: 10px; }
-        .overall-row { display: flex; justify-content: space-between; padding: 5px 0; }
-        .total-sign-box { background: #0b2b4f; color: white; padding: 10px; text-align: center; border-radius: 5px; font-size: 24px; margin-top: 5px; }
-        .total-sales { background: #0b2b4f; color: white; padding: 15px 25px; display: flex; justify-content: space-between; border-radius: 5px; margin-top: 20px; font-size: 20px; }
-        .reset-btn { background: #2563eb; color: white; border: none; padding: 5px 15px; border-radius: 3px; cursor: pointer; margin-left: 10px; }
-        .input-group { display: flex; align-items: center; gap: 5px; }
-        .percent-sign { color: #666; width: 15px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f0f2f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        .display {
+            width: 100%;
+            height: 60px;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        button {
+            height: 50px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #e9ecef;
+        }
+        button:hover {
+            background: #dee2e6;
+        }
+        .operator {
+            background: #007bff;
+            color: white;
+        }
+        .operator:hover {
+            background: #0056b3;
+        }
+        .equals {
+            background: #28a745;
+            color: white;
+        }
+        .equals:hover {
+            background: #218838;
+        }
+        .clear {
+            background: #dc3545;
+            color: white;
+        }
+        .clear:hover {
+            background: #c82333;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📊 Sales Estimation <button class="reset-btn" onclick="resetToOriginal()">Reset</button></h1>
-
-        <div class="grid-4" id="channelGrid"></div>
-
-        <div class="overall-title">Overall Performance</div>
-        <div class="overall-grid">
-            <div class="overall-col">
-                <div class="overall-header">Node Activation</div>
-                <div class="overall-row"><span>Head book</span> <span id="overallHeadBook">4,132</span></div>
-                <div class="overall-row"><span>Show</span> <span>70%</span></div>
-                <div class="overall-row"><span>Sign</span> <span>30%</span></div>
-            </div>
-            <div class="overall-col">
-                <div class="overall-header">Node Replication</div>
-                <div class="overall-row"><span>Tail book</span> <span><span id="overallTailBookPct">49</span>% <span id="overallTailBook">2,022</span></span></div>
-                <div class="overall-row"><span>Show</span> <span>30% <span id="overallTailShow">607</span></span></div>
-                <div class="overall-row"><span>Sign</span> <span>20% <span id="overallTailSign">121</span></span></div>
-            </div>
-            <div class="overall-col">
-                <div class="overall-header">Total Sign</div>
-                <div class="total-sign-box" id="overallTotalSign">989</div>
-            </div>
-        </div>
-
-        <div class="total-sales">
-            <span>Total Sales:</span>
-            <span id="totalSalesAll">$15,823,104</span>
+    <div class="calculator">
+        <input type="text" class="display" id="display" readonly value="0">
+        <div class="buttons">
+            <!-- Row 1: Clear and operators -->
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button class="operator" onclick="appendOperator('/')">/</button>
+            <button class="operator" onclick="appendOperator('*')">×</button>
+            <button class="operator" onclick="appendOperator('-')">-</button>
+            
+            <!-- Row 2: 7 8 9 + -->
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="appendOperator('+')">+</button>
+            
+            <!-- Row 3: 4 5 6 -->
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            
+            <!-- Row 4: 1 2 3 = -->
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button class="equals" onclick="calculate()" rowspan="2">=</button>
+            
+            <!-- Row 5: 0 . -->
+            <button onclick="appendNumber('0')" style="grid-column: span 2;">0</button>
+            <button onclick="appendDecimal()">.</button>
         </div>
     </div>
 
     <script>
-        const originalData = [
-            { name:'Therapist', audience:3640, reach:70, headBook:70, headShow:70, headSign:30, tailBook:50, tailShow:30, tailSign:20, ticketSize:16000 },
-            { name:'CSE', audience:2000, reach:70, headBook:90, headShow:70, headSign:30, tailBook:50, tailShow:30, tailSign:20, ticketSize:16000 },
-            { name:'Call Centre', audience:2200, reach:20, headBook:20, headShow:70, headSign:30, tailBook:0, tailShow:30, tailSign:20, ticketSize:16600 },
-            { name:'AI Agent', audience:100000, reach:10, headBook:10, headShow:700, headSign:210, tailBook:50, tailShow:150, tailSign:30, ticketSize:16000 }
-        ];
+        const display = document.getElementById('display');
+        let shouldResetDisplay = false;
 
-        let channels = JSON.parse(JSON.stringify(originalData));
-
-        function calculateChannel(ch, idx) {
-            const isAI = idx === 3;
-            const reached = Math.round(ch.audience * ch.reach / 100);
-            const headBook = Math.round(reached * ch.headBook / 100);
-            const headShow = isAI ? ch.headShow : Math.round(headBook * ch.headShow / 100);
-            const headSign = isAI ? ch.headSign : Math.round(headShow * ch.headSign / 100);
-            const tailBook = Math.round(headBook * ch.tailBook / 100);
-            const tailShow = isAI ? ch.tailShow : Math.round(tailBook * ch.tailShow / 100);
-            const tailSign = isAI ? ch.tailSign : Math.round(tailShow * ch.tailSign / 100);
-            const totalSign = headSign + tailSign;
-            const sales = Math.round(totalSign * ch.ticketSize);
-            return { reached, headBook, headShow, headSign, tailBook, tailShow, tailSign, totalSign, sales };
+        function appendNumber(num) {
+            if (display.value === '0' || shouldResetDisplay) {
+                display.value = num;
+                shouldResetDisplay = false;
+            } else {
+                display.value += num;
+            }
         }
 
-        function calculateTotals() {
-            let hb=0, hs=0, hsg=0, tb=0, ts=0, tsg=0, tsign=0, tsales=0;
-            channels.forEach((ch,i)=>{ let c=calculateChannel(ch,i); hb+=c.headBook; hs+=c.headShow; hsg+=c.headSign; tb+=c.tailBook; ts+=c.tailShow; tsg+=c.tailSign; tsign+=c.totalSign; tsales+=c.sales; });
-            return { headBook:hb, headShow:hs, headSign:hsg, tailBook:tb, tailShow:ts, tailSign:tsg, totalSign:tsign, totalSales:tsales, tailBookPct: hb?Math.round(tb/hb*100):0 };
+        function appendDecimal() {
+            if (shouldResetDisplay) {
+                display.value = '0.';
+                shouldResetDisplay = false;
+            } else if (!display.value.includes('.')) {
+                display.value += '.';
+            }
         }
 
-        function buildDashboard() {
-            let html = '';
-            channels.forEach((ch, idx) => {
-                const isAI = idx === 3;
-                const c = calculateChannel(ch, idx);
-                html += `<div class="card"><h3>${ch.name}</h3>
-                    <div class="row"><span class="label">Audience</span> <input type="number" id="aud-${idx}" value="${ch.audience}" onchange="update(${idx})"> <span class="value">${ch.audience}</span></div>
-                    <div class="row"><span class="label">Reach</span> <input type="number" id="reach-${idx}" value="${ch.reach}" onchange="update(${idx})"> <span class="percent-sign">%</span> <span class="value">${c.reached}</span></div>
-                    <div class="section-title">Node activation</div>
-                    <div class="row"><span class="label">Head book</span> <input type="number" id="hb-${idx}" value="${ch.headBook}" onchange="update(${idx})"> <span class="percent-sign">%</span> <span class="value">${c.headBook}</span></div>
-                    <div class="row"><span class="label">Show</span> <input type="number" id="hshow-${idx}" value="${ch.headShow}" onchange="update(${idx})"> ${!isAI?'<span class="percent-sign">%</span>':'<span></span>'} <span class="value">${c.headShow}</span></div>
-                    <div class="row"><span class="label">Sign</span> <input type="number" id="hsig-${idx}" value="${ch.headSign}" onchange="update(${idx})"> ${!isAI?'<span class="percent-sign">%</span>':'<span></span>'} <span class="value">${c.headSign}</span></div>
-                    <div class="section-title">Node Replication</div>
-                    <div class="row"><span class="label">Tail book</span> <input type="number" id="tb-${idx}" value="${ch.tailBook}" onchange="update(${idx})"> <span class="percent-sign">%</span> <span class="value">${c.tailBook}</span></div>
-                    <div class="row"><span class="label">Show</span> <input type="number" id="tshow-${idx}" value="${ch.tailShow}" onchange="update(${idx})"> ${!isAI?'<span class="percent-sign">%</span>':'<span></span>'} <span class="value">${c.tailShow}</span></div>
-                    <div class="row"><span class="label">Sign</span> <input type="number" id="tsig-${idx}" value="${ch.tailSign}" onchange="update(${idx})"> ${!isAI?'<span class="percent-sign">%</span>':'<span></span>'} <span class="value">${c.tailSign}</span></div>
-                    <div class="row total-row"><span class="label">Total sign</span> <span class="value" id="ts-${idx}">${c.totalSign}</span></div>
-                    <div class="row"><span class="label">Ticket size</span> $<input type="number" id="ticket-${idx}" value="${ch.ticketSize}" onchange="update(${idx})" style="width:70px;"></div>
-                    <div class="row sales-row"><span class="label">Sales</span> <span class="value" id="sales-${idx}">$${c.sales.toLocaleString()}</span></div>
-                </div>`;
-            });
-            document.getElementById('channelGrid').innerHTML = html;
+        function appendOperator(op) {
+            if (shouldResetDisplay) shouldResetDisplay = false;
             
-            const t = calculateTotals();
-            document.getElementById('overallHeadBook').innerText = t.headBook.toLocaleString();
-            document.getElementById('overallTailBook').innerText = t.tailBook.toLocaleString();
-            document.getElementById('overallTailBookPct').innerText = t.tailBookPct;
-            document.getElementById('overallTailShow').innerText = t.tailShow.toLocaleString();
-            document.getElementById('overallTailSign').innerText = t.tailSign.toLocaleString();
-            document.getElementById('overallTotalSign').innerText = t.totalSign.toLocaleString();
-            document.getElementById('totalSalesAll').innerText = '$' + t.totalSales.toLocaleString();
+            const lastChar = display.value.slice(-1);
+            if (['+', '-', '*', '/'].includes(lastChar)) {
+                display.value = display.value.slice(0, -1) + op;
+            } else {
+                display.value += op;
+            }
         }
 
-        window.update = function(idx) {
-            channels[idx].audience = parseFloat(document.getElementById(`aud-${idx}`).value) || 0;
-            channels[idx].reach = parseFloat(document.getElementById(`reach-${idx}`).value) || 0;
-            channels[idx].headBook = parseFloat(document.getElementById(`hb-${idx}`).value) || 0;
-            channels[idx].headShow = parseFloat(document.getElementById(`hshow-${idx}`).value) || 0;
-            channels[idx].headSign = parseFloat(document.getElementById(`hsig-${idx}`).value) || 0;
-            channels[idx].tailBook = parseFloat(document.getElementById(`tb-${idx}`).value) || 0;
-            channels[idx].tailShow = parseFloat(document.getElementById(`tshow-${idx}`).value) || 0;
-            channels[idx].tailSign = parseFloat(document.getElementById(`tsig-${idx}`).value) || 0;
-            channels[idx].ticketSize = parseFloat(document.getElementById(`ticket-${idx}`).value) || 0;
-            buildDashboard();
-        };
+        function clearDisplay() {
+            display.value = '0';
+            shouldResetDisplay = false;
+        }
 
-        window.resetToOriginal = function() { channels = JSON.parse(JSON.stringify(originalData)); buildDashboard(); };
-        buildDashboard();
+        function calculate() {
+            try {
+                let expression = display.value.replace(/×/g, '*');
+                const result = eval(expression);
+                display.value = Number.isFinite(result) ? result.toString() : 'Error';
+                shouldResetDisplay = true;
+            } catch {
+                display.value = 'Error';
+                shouldResetDisplay = true;
+            }
+        }
     </script>
 </body>
 </html>
