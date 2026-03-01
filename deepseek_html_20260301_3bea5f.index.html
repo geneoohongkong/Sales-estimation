@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4‑Box · Therapist · CSE · Call · AI</title>
+    <title>Therapist + CSE · two linked boxes</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
@@ -16,24 +16,24 @@
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
-    <div class="max-w-7xl w-full">
+    <div class="max-w-4xl w-full">
         <!-- simple header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-semibold text-gray-800 tracking-tight">📊 channel estimator</h1>
-            <p class="text-gray-500 text-sm mt-1">Therapist · CSE · Call centre · AI agent — edit any number, sales auto‑update</p>
+            <h1 class="text-3xl font-semibold text-gray-800 tracking-tight">📊 therapist · cse</h1>
+            <p class="text-gray-500 text-sm mt-1">edit any number — sales auto‑update independently</p>
         </div>
 
-        <!-- four cards in a row -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" id="cardContainer"></div>
+        <!-- two cards in a row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="cardContainer"></div>
 
-        <!-- tiny footer (no totals, no charts) -->
+        <!-- tiny footer (no totals) -->
         <div class="text-center text-xs text-gray-400 mt-10">
             each box works independently · sales recalculated from funnel
         </div>
     </div>
 
     <script>
-        // ----- data for four channels (exact original figures) -----
+        // ----- data for two channels: Therapist & CSE -----
         const channels = [
             {
                 id: 'ther',
@@ -68,40 +68,6 @@
                 tailShow: 30,
                 tailSign: 20,
                 sales: 4838400
-            },
-            {
-                id: 'call',
-                name: 'Call centre',
-                color: '#f59e0b',
-                emoji: '🏢',
-                audience: 2200,
-                reach: 20,
-                selfAct: 20,
-                nodeAct: 20,
-                show: 70,
-                sign: 30,
-                tailBook: 0,
-                replNo: 0,
-                tailShow: 0,
-                tailSign: 0,
-                sales: 295680
-            },
-            {
-                id: 'ai',
-                name: 'AI agent',
-                color: '#8b5cf6',
-                emoji: '🤖',
-                audience: 100000,
-                reach: 10,
-                selfAct: 10,
-                nodeAct: 10,
-                show: 70,
-                sign: 30,
-                tailBook: 500,
-                replNo: 20,
-                tailShow: 30,
-                tailSign: 20,
-                sales: 3840000
             }
         ];
 
@@ -132,7 +98,7 @@
             `;
         }
 
-        // ----- render all cards -----
+        // ----- render both cards -----
         function renderCards() {
             const container = document.getElementById('cardContainer');
             container.innerHTML = '';
@@ -227,7 +193,7 @@
             if (badge) badge.innerText = newSales.toLocaleString();
         }
 
-        // ----- update all channels -----
+        // ----- update both channels -----
         function updateAll() {
             for (let i = 0; i < channels.length; i++) updateChannel(i);
         }
