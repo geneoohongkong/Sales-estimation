@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSE · single linked box</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+        body { background: #f2f5fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.8rem 1.8rem 1.8rem 1.8rem;
+            width: 420px;
+            box-shadow: 0 15px 30px -8px rgba(0,30,50,0.15);
+            border: 1px solid #dce6f0;
+        }
+        h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: #e5edf8;
+            display: inline-block;
+            padding: 0.15rem 1.5rem;
+            border-radius: 50px;
+            margin-bottom: 0.8rem;
+            color: #113355;
+        }
+        .sales-row {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: right;
+            border-bottom: 2px solid #cbd8e8;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sales-row span { color: #1f3a5f; }
+        .sales-row input {
+            width: 140px;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            border: 1px solid #b0c2d6;
+            background: #eaf1fa;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-align: right;
+        }
+        .line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed #d3e0ec;
+            padding: 0.45rem 0;
+            font-size: 1rem;
+        }
+        .label { color: #2b4a6f; font-weight: 500; }
+        input {
+            width: 85px;
+            padding: 0.25rem 0.6rem;
+            border-radius: 30px;
+            border: 1px solid #b9cbdf;
+            background: #f5faff;
+            text-align: right;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        input:focus { outline: 2px solid #2f6eb0; }
+        .tail-block {
+            background: #f1f7ff;
+            border-radius: 20px;
+            padding: 0.8rem 1rem;
+            margin: 1rem 0 0.5rem;
+        }
+        .tail-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #1d4e89;
+            letter-spacing: 0.3px;
+            margin-bottom: 0.5rem;
+        }
+        .attribution { text-align: center; color: #5f748e; font-size: 0.8rem; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h3>CSE</h3>
+
+    <!-- Sales field (readonly, auto computed) -->
+    <div class="sales-row">
+        <span>💰 Sales</span>
+        <input type="number" id="salesCse" value="4838400" step="any" readonly>
+    </div>
+
+    <!-- main funnel inputs -->
+    <div class="line">
+        <span class="label">Audience</span>
+        <input type="number" id="aud" value="2000" step="1" min="0">
+    </div>
+    <div class="line">
+        <span class="label">Reach %</span>
+        <input type="number" id="reach" value="70" step="any" min="0" max="100">
+    </div>
+    <div class="line">
+        <span class="label">Self act %</span>
+        <input type="number" id="selfAct" value="90" step="any" min="0" max="100">
+    </div>
+    <div class="line">
+        <span class="label">Node act %</span>
+        <input type="number" id="nodeAct" value="90" step="any" min="0" max="100">
+    </div>
+    <div class="line">
+        <span class="label">Show %</span>
+        <input type="number" id="show" value="70" step="any" min="0" max="100">
+    </div>
+    <div class="line">
+        <span class="label">Sign %</span>
+        <input type="number" id="sign" value="30" step="any" min="0" max="100">
+    </div>
+
+    <!-- tail replication block -->
+    <div class="tail-block">
+        <div class="tail-title">🔁 TAIL REPLICATION</div>
+        <div class="line">
+            <span class="label">Tail book #</span>
+            <input type="number" id="tailBook" value="630" step="any" min="0">
+        </div>
+        <div class="line">
+            <span class="label">Repl no.</span>
+            <input type="number" id="replNo" value="20" step="any" min="0">
+        </div>
+        <div class="line">
+            <span class="label">Show tail %</span>
+            <input type="number" id="tailShow" value="30" step="any" min="0" max="100">
+        </div>
+        <div class="line">
+            <span class="label">Sign tail %</span>
+            <input type="number" id="tailSign" value="20" step="any" min="0" max="100">
+        </div>
+    </div>
+
+    <div class="attribution">
+        ⚡ any change → sales updates · fixed ticket from original
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ---- get elements ----
+        const audInp = document.getElementById('aud');
+        const reachInp = document.getElementById('reach');
+        const selfInp = document.getElementById('selfAct');      // not used in sales, only for demo (could be used)
+        const nodeInp = document.getElementById('nodeAct');
+        const showInp = document.getElementById('show');
+        const signInp = document.getElementById('sign');
+        const tailBookInp = document.getElementById('tailBook');
+        const replNoInp = document.getElementById('replNo');
+        const tailShowInp = document.getElementById('tailShow');
+        const tailSignInp = document.getElementById('tailSign');
+        const salesField = document.getElementById('salesCse');
+
+        // ---- helper to read float ----
+        const get = (el) => { const v = parseFloat(el.value); return isNaN(v) ? 0 : v; };
+
+        // ---- pre‑compute fixed ticket from the original CSE values ----
+        // original numbers: aud=2000, reach=70, nodeAct=90, show=70, sign=30,
+        // tailBook=630, replNo=20, tailShow=30, tailSign=20, sales=4838400
+        const origAud = 2000, origReach = 70, origNode = 90, origShow = 70, origSign = 30;
+        const origTail = 630, origRepl = 20, origTshow = 30, origTsign = 20;
+        const origSales = 4838400;
+
+        const origReached = origAud * (origReach/100);
+        const origNodeAct = origReached * (origNode/100);
+        const origShows = origNodeAct * (origShow/100);
+        const origPrimSign = origShows * (origSign/100);
+        const origTailSign = origTail * origRepl * (origTshow/100) * (origTsign/100);
+        const origTotalSign = origPrimSign + origTailSign;
+        const ticket = origTotalSign > 0 ? origSales / origTotalSign : 0;   // ≈ 860.5  (but we keep precise)
+
+        // ---- update function ----
+        function refresh() {
+            const aud = get(audInp);
+            const reach = get(reachInp) / 100;
+            const node = get(nodeInp) / 100;
+            const show = get(showInp) / 100;
+            const sign = get(signInp) / 100;
+
+            const tailBook = get(tailBookInp);
+            const replNo = get(replNoInp);
+            const tailShow = get(tailShowInp) / 100;
+            const tailSign = get(tailSignInp) / 100;
+
+            const reached = aud * reach;
+            const nodeAct = reached * node;
+            const shows = nodeAct * show;
+            const primarySigners = shows * sign;
+
+            const tailSigners = tailBook * replNo * tailShow * tailSign;
+            const totalSign = primarySigners + tailSigners;
+
+            const sales = totalSign * ticket;
+            salesField.value = Math.round(sales);
+        }
+
+        // ---- attach event listeners to all inputs (except readonly sales) ----
+        const inputs = [audInp, reachInp, selfInp, nodeInp, showInp, signInp,
+                        tailBookInp, replNoInp, tailShowInp, tailSignInp];
+        inputs.forEach(inp => inp.addEventListener('input', refresh));
+
+        // ---- initial call to display correct sales ----
+        refresh();
+    })();
+</script>
+</body>
+</html>
