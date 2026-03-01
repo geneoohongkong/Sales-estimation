@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>funnel · 4‑up linked</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+        body { background: #f0f3f8; padding: 2rem 1rem; }
+        .container { max-width: 1500px; margin: 0 auto; }
+        h2 { margin-bottom: 1.5rem; font-weight: 500; color: #1e2f4a; font-size: 1.4rem; }
+        .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .card { background: white; border-radius: 20px; padding: 1rem 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #dbe4ed; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.3rem; background: #ecf2f9; display: inline-block; padding: 0.1rem 1rem; border-radius: 30px; }
+        .big-sales { font-size: 1.4rem; font-weight: 700; text-align: right; border-bottom: 1px solid #d2deec; padding-bottom: 0.2rem; margin-bottom: 0.6rem; color: #002856; }
+        .line { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border-bottom: 1px dashed #e2e9f2; padding: 0.2rem 0; }
+        .label { color: #2b4a6f; }
+        input { width: 70px; padding: 0.2rem 0.3rem; border: 1px solid #b9cbdf; border-radius: 30px; text-align: right; font-weight: 500; background: #f6faff; font-size: 0.85rem; }
+        input:focus { outline: 2px solid #2b6c9e; }
+        .tail-block { background: #f4f9ff; border-radius: 16px; padding: 0.5rem 0.6rem; margin: 0.7rem 0 0.3rem; }
+        .tail-title { font-weight: 600; font-size: 0.7rem; text-transform: uppercase; color: #1f5090; margin-bottom: 0.2rem; }
+        .readonly-sales { background: #e5ecf5; border: 1px solid #b0c6dd; font-weight: 700; width: 100px; }
+        .overall { background: #102a41; color: white; border-radius: 40px; padding: 1.5rem 1.8rem; display: flex; flex-wrap: wrap; gap: 1.5rem 2rem; margin: 1.5rem 0 1rem; }
+        .overall-item { display: flex; flex-direction: column; }
+        .overall-label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; }
+        .overall-number { font-size: 1.6rem; font-weight: 700; }
+        .attribution { text-align: center; color: #4b637b; font-size: 0.75rem; margin-top: 1.8rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>⚡ funnel · 4‑up linked (blank → auto update)</h2>
+    <div class="row" id="cardRow"></div>   <!-- four cards injected -->
+
+    <div class="overall">
+        <div class="overall-item"><span class="overall-label">Self activation %</span><span class="overall-number" id="actPct">0.00%</span></div>
+        <div class="overall-item"><span class="overall-label">Tail book sum</span><span class="overall-number" id="tailSum">0.00</span></div>
+        <div class="overall-item"><span class="overall-label">Total sign no.</span><span class="overall-number" id="totalSign">0.00</span></div>
+        <div class="overall-item"><span class="overall-label">Total sales</span><span class="overall-number" id="totalSales">0</span></div>
+    </div>
+
+    <div style="background: white; border-radius: 40px; padding: 0.8rem 1.8rem; display: flex; gap: 2rem; border:1px solid #d7e2ef;">
+        <span>📊 tail: <span id="sumTailFoot">0.00</span></span>
+        <span>📈 sign: <span id="sumSignFoot">0.00</span></span>
+        <span>💰 sales: <span id="sumSalesFoot">0</span></span>
+    </div>
+    <div class="attribution">all inputs linked · change any number → everything recomputes</div>
+</div>
+
+<script>
+(function() {
+    // ----- initial blank template (values from image, but can be changed) -----
+    const channels = [
+        { name:'Therapist',  aud:3640, reach:70, self:70, node:70, show:30, sign:30, tail:900, repl:20, tshow:30, tsign:20, sales:6856896 },
+        { name:'CSE',        aud:2000, reach:70, self:90, node:90, show:30, sign:30, tail:630, repl:20, tshow:30, tsign:20, sales:4838400 },
+        { name:'Call centre',aud:2200, reach:20, self:20, node:20, show:30, sign:30, tail:0,   repl:0,  tshow:0,  tsign:0,  sales:295680 },
+        { name:'AI agent',   aud:100000, reach:10, self:10, node:10, show:70, sign:30, tail:500, repl:20, tshow:30, tsign:20, sales:3840000 }
+    ];
+
+    // ----- build four cards, assign short ids: th0, th1, th2, th3 + field names -----
+    const row = document.getElementById('cardRow');
+    let html = '';
+    channels.forEach((ch, i) => {
+        html += `
+        <div class="card">
+            <h3>${ch.name}</h3>
+            <div class="big-sales"><input type="number" id="s${i}" value="${ch.sales}" step="any" readonly class="readonly-sales" style="width:110px;"></div>
+            <div class="line"><span class="label">Audience</span> <input type="number" id="a${i}" value="${ch.aud}" step="1" min="0"></div>
+            <div class="line"><span class="label">Reach %</span> <input type="number" id="r${i}" value="${ch.reach}" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Self act %</span> <input type="number" id="se${i}" value="${ch.self}" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Node act %</span> <input type="number" id="n${i}" value="${ch.node}" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Show %</span> <input type="number" id="sh${i}" value="${ch.show}" step="any" min="0" max="100"></div>
+            <div class="line"><span class="label">Sign %</span> <input type="number" id="si${i}" value="${ch.sign}" step="any" min="0" max="100"></div>
+            <div class="tail-block">
+                <div class="tail-title">TAIL REPLICATION</div>
+                <div class="line"><span class="label">Tail book #</span> <input type="number" id="t${i}" value="${ch.tail}" step="any" min="0"></div>
+                <div class="line"><span class="label">Repl no.</span> <input type="number" id="rep${i}" value="${ch.repl}" step="any" min="0"></div>
+                <div class="line"><span class="label">Show tail %</span> <input type="number" id="ts${i}" value="${ch.tshow}" step="any" min="0" max="100"></div>
+                <div class="line"><span class="label">Sign tail %</span> <input type="number" id="tss${i}" value="${ch.tsign}" step="any" min="0" max="100"></div>
+            </div>
+        </div>`;
+    });
+    row.innerHTML = html;
+
+    // ----- helper to read input safely -----
+    const $ = id => {
+        const el = document.getElementById(id);
+        if (!el) return 0;
+        const v = parseFloat(el.value);
+        return isNaN(v) ? 0 : v;
+    };
+
+    // ----- pre‑compute fixed ticket (sales per total sign) from initial values to keep ratio -----
+    const ticketFactor = channels.map((ch, i) => {
+        const reach = ch.aud * (ch.reach/100);
+        const nodeAct = reach * (ch.node/100);
+        const shows = nodeAct * (ch.show/100);
+        const primSign = shows * (ch.sign/100);
+        const tailSign = ch.tail * ch.repl * (ch.tshow/100) * (ch.tsign/100);
+        const totalSign = primSign + tailSign;
+        return totalSign > 0 ? ch.sales / totalSign : 0;
+    });
+
+    // ----- main update function -----
+    function refresh() {
+        let totalTail = 0, totalSignNo = 0, totalSales = 0;
+        let totalSelfAct = 0, totalReached = 0;
+
+        for (let i = 0; i < 4; i++) {
+            // read all values
+            const aud = $(`a${i}`), reach = $(`r${i}`)/100, selfPct = $(`se${i}`)/100,
+                  nodePct = $(`n${i}`)/100, showPct = $(`sh${i}`)/100, signPct = $(`si${i}`)/100,
+                  tailBook = $(`t${i}`), replNo = $(`rep${i}`),
+                  tailShow = $(`ts${i}`)/100, tailSign = $(`tss${i}`)/100;
+
+            const reached = aud * reach;
+            const selfAct = reached * selfPct;      // for overall activation
+            const nodeAct = reached * nodePct;
+            const shows = nodeAct * showPct;
+            const primarySign = shows * signPct;
+            const tailGenerated = tailBook * replNo * tailShow * tailSign;
+            const totalSign = primarySign + tailGenerated;
+            const sales = totalSign * ticketFactor[i];
+
+            totalReached += reached;
+            totalSelfAct += selfAct;
+            totalTail += tailBook;
+            totalSignNo += totalSign;
+            totalSales += sales;
+
+            // update readonly sales field
+            const salesField = document.getElementById(`s${i}`);
+            if (salesField) salesField.value = Math.round(sales);
+        }
+
+        // overall self activation %
+        const overallAct = totalReached > 0 ? (totalSelfAct / totalReached) * 100 : 0;
+        document.getElementById('actPct').innerText = overallAct.toFixed(2) + '%';
+        document.getElementById('tailSum').innerText = totalTail.toFixed(2);
+        document.getElementById('totalSign').innerText = totalSignNo.toFixed(2);
+        document.getElementById('totalSales').innerText = Math.round(totalSales).toLocaleString();
+
+        // footer
+        document.getElementById('sumTailFoot').innerText = totalTail.toFixed(2);
+        document.getElementById('sumSignFoot').innerText = totalSignNo.toFixed(2);
+        document.getElementById('sumSalesFoot').innerText = Math.round(totalSales).toLocaleString();
+    }
+
+    // ----- bind all inputs (except readonly sales) -----
+    const inputs = document.querySelectorAll('input:not([readonly])');
+    inputs.forEach(inp => inp.addEventListener('input', refresh));
+
+    // initial update to set correct sales / overalls
+    refresh();
+})();
+</script>
+</body>
+</html>
